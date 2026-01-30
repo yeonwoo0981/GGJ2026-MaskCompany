@@ -5,7 +5,8 @@ namespace Work.Yeonwoo._01_Scripts.PC
 {
     public class Player : MonoSingleton<Player>
     {
-        [field:SerializeField] public PlayerMove PlayerMove { get; set; }
-        [field:SerializeField] public PlayerAnim PlayerAnim { get; set; }
+        [field:SerializeField] public PlayerMove PlayerMove { get; private set; }
+        [field:SerializeField] public PlayerAnim PlayerAnim { get; private set; }
+        [field:SerializeField] public PersonaSystem PersonaSystem { get; private set; }
     }
 }
