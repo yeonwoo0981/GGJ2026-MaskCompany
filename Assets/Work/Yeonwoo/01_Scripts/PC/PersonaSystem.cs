@@ -9,12 +9,13 @@ namespace Work.Yeonwoo._01_Scripts.PC
         [field:SerializeField] public float Blue { get; set; }
         [field:SerializeField] public float Yellow { get; set; }
         [field:SerializeField] public float Green { get; set; }
+        [field:SerializeField] public float Score { get; private set; }
 
         public event Action IsAddPerSona;
         public event Action IsMinusPerSona;
 
-        public Action IsGameOver;
-        public Action IsWin;
+        public event Action IsGameOver;
+        public event Action IsWin;
         
         private void Start()
         {
@@ -22,18 +23,25 @@ namespace Work.Yeonwoo._01_Scripts.PC
             Blue = 100;
             Yellow = 100;
             Green = 100;
+            Score = Red + Blue + Yellow + Green;
         }
 
         public void AddPerSona(float value)
         {
             IsAddPerSona?.Invoke();
-            //if (페르소나 점수가 특이점을 넘어서 증가하면) {IsWin}
+            if (Score > 1000) // 예를 들어서
+            {
+                IsWin?.Invoke();
+            }
         }
 
         public void RemovePerSona(float value)
         {
             IsMinusPerSona?.Invoke();
-            //if (페르소나 점수가 특이점을 넘어서 감소하면) {IsGameOver}
+            if (Score < 100)
+            {
+                IsGameOver?.Invoke();
+            }
         }
     }
 }
