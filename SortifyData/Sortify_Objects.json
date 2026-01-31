@@ -5,6 +5,12 @@
             "styles": [],
             "showComponents": [],
             "sceneName": "Dev"
+        },
+        {
+            "colors": [],
+            "styles": [],
+            "showComponents": [],
+            "sceneName": "Game"
         }
     ]
 }
