@@ -10,11 +10,11 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 46b799365a73fa84e9700b9ae4677d8c, type: 3}
-  m_Name: Dominant Bull
+  m_Name: Angry Bull
   m_EditorClassIdentifier: Assembly-CSharp::MaskCompany.NPCConfig
   npcName: Bull
   sprite: {fileID: -3102994270238535240, guid: b66832cb2931f0e4bb94976d866e54ff, type: 3}
-  personality: 1
+  personality: 0
   moveSpeed: 2
-  detectionRange: 3
+  detectionRange: 2
   tintColor: {r: 1, g: 1, b: 1, a: 1}

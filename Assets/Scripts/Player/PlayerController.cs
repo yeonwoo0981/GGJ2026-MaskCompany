@@ -11,6 +11,13 @@ namespace MaskCompany
 
         [Header("Mask")]
         [SerializeField] private MaskType currentMask = MaskType.Joy;
+        [SerializeField] private SpriteRenderer maskRenderer; // Child object that displays the mask
+        
+        [Header("Mask Sprites")]
+        [SerializeField] private Sprite joySprite;
+        [SerializeField] private Sprite angerSprite;
+        [SerializeField] private Sprite fearSprite;
+        // Neutral has no sprite (mask hidden)
 
         private Rigidbody2D rb;
         private SpriteRenderer spriteRenderer;
@@ -55,6 +62,12 @@ namespace MaskCompany
 
         private void HandleMaskInput()
         {
+            // Check if mask changing is allowed (tutorial mode)
+            if (TutorialManager.TutoMode && !TutorialManager.Instance.CanChangeMask)
+            {
+                return;
+            }
+            
             var kb = Keyboard.current;
             if (kb == null) return;
 
@@ -66,6 +79,13 @@ namespace MaskCompany
 
         private void FixedUpdate()
         {
+            // Check if movement is allowed (tutorial mode)
+            if (TutorialManager.TutoMode && !TutorialManager.Instance.CanPlayerMove)
+            {
+                rb.linearVelocity = Vector2.zero;
+                return;
+            }
+            
             rb.linearVelocity = moveInput * moveSpeed;
         }
 
@@ -78,13 +98,27 @@ namespace MaskCompany
 
         private void UpdateMaskVisual()
         {
-            if (spriteRenderer == null) return;
-            spriteRenderer.color = GetMaskColor(currentMask);
-        }
-
-        public static Color GetMaskColor(MaskType mask)
-        {
-            return PersonalitySystem.GetMaskColor(mask);
+            if (maskRenderer == null) return;
+            
+            switch (currentMask)
+            {
+                case MaskType.Joy:
+                    maskRenderer.sprite = joySprite;
+                    maskRenderer.enabled = joySprite != null;
+                    break;
+                case MaskType.Anger:
+                    maskRenderer.sprite = angerSprite;
+                    maskRenderer.enabled = angerSprite != null;
+                    break;
+                case MaskType.Fear:
+                    maskRenderer.sprite = fearSprite;
+                    maskRenderer.enabled = fearSprite != null;
+                    break;
+                case MaskType.Neutral:
+                default:
+                    maskRenderer.enabled = false; // No mask for neutral
+                    break;
+            }
         }
     }
 }

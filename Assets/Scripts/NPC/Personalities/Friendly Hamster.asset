@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::MaskCompany.NPCConfig
   npcName: Friendly Hamster
   sprite: {fileID: 7755224123621818408, guid: b66832cb2931f0e4bb94976d866e54ff, type: 3}
-  personality: 3
+  personality: 6
   moveSpeed: 2
-  detectionRange: 3
+  detectionRange: 2
   tintColor: {r: 1, g: 1, b: 1, a: 1}

@@ -12,7 +12,7 @@ namespace MaskCompany
 
         [Header("Stats")]
         public float moveSpeed = 2f;
-        public float detectionRange = 3f;
+        public float detectionRange = 2f;
 
         [Header("Visuals")]
         public Color tintColor = Color.white;

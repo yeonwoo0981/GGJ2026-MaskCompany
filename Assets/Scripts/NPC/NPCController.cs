@@ -13,6 +13,7 @@ namespace MaskCompany
         [Header("Range Indicator")]
         [SerializeField] private Sprite rangeSprite;
         [SerializeField] private bool showRangeGizmo = true;
+        [SerializeField] private float visualRangeMultiplier = 1.6f; // Visual indicator is larger than actual detection
 
         [Header("Breathing Animation")]
         [SerializeField] private float baseBreatheDuration = 1.5f;
@@ -25,6 +26,7 @@ namespace MaskCompany
         [Header("Comfort System")]
         [SerializeField] private float comfortChangeSpeed = 1f;    // Multiplier for player influence
         [SerializeField] private float comfortDecaySpeed = 0.05f;  // How fast comfort returns to neutral (slow)
+        [SerializeField] private float extremeLockDuration = 5f;   // How long to stay at extreme before decay
 
         [Header("Emotion State")]
         [SerializeField, Range(-1f, 1f)] private float comfortLevel; // -1 (upset) to +1 (happy)
@@ -46,11 +48,36 @@ namespace MaskCompany
         private Vector3 originalScale;
         private CompatibilityResult? lastParticleResult; // Nullable to force first update
         private bool hasInitialBurst; // Only burst once per NPC lifetime
+        private float extremeLockTimer; // Timer to prevent decay after reaching extreme
+        private bool hasReachedExtreme; // Track if we've notified tutorial manager
 
         public PersonalityType Personality => currentConfig != null ? currentConfig.personality : PersonalityType.Loner;
         public float DetectionRange => currentConfig != null ? currentConfig.detectionRange : 3f;
         public float ComfortLevel => comfortLevel;
         public NPCConfig CurrentConfig => currentConfig;
+
+        /// <summary>
+        /// Hide range indicator and particles (called by TutorialManager when room is complete)
+        /// </summary>
+        public void HideInteractionVisuals()
+        {
+            // Hide range indicator
+            if (rangeIndicator != null)
+            {
+                rangeIndicator.DOFade(0f, 0.3f).OnComplete(() => {
+                    if (rangeIndicator != null) rangeIndicator.enabled = false;
+                });
+            }
+            
+            // Stop and clear particles
+            if (emotionParticles != null)
+            {
+                var emission = emotionParticles.emission;
+                emission.rateOverTime = 0;
+                emotionParticles.Stop();
+                emotionParticles.Clear();
+            }
+        }
 
         /// <summary>
         /// Right-click menu: Apply current config visuals (sprite, color)
@@ -123,6 +150,7 @@ namespace MaskCompany
             {
                 rb.gravityScale = 0f;
                 rb.freezeRotation = true;
+                rb.bodyType = RigidbodyType2D.Kinematic; // Prevent player from pushing NPCs
             }
         }
 
@@ -180,6 +208,29 @@ namespace MaskCompany
 
         private void UpdateComfort()
         {
+            // Check if we just reached POSITIVE extreme (happy state only)
+            // Negative extreme (angry) should NOT be locked - they need to get fired!
+            bool isAtPositiveExtreme = comfortLevel >= 0.9f;
+            
+            if (isAtPositiveExtreme && extremeLockTimer <= 0f)
+            {
+                // Just reached happy extreme - start the lock timer
+                extremeLockTimer = extremeLockDuration;
+                
+                // Notify tutorial manager if in tutorial mode
+                if (!hasReachedExtreme && TutorialManager.TutoMode)
+                {
+                    hasReachedExtreme = true;
+                    TutorialManager.Instance?.OnNPCReachedExtreme(this);
+                }
+            }
+            
+            // Count down lock timer
+            if (extremeLockTimer > 0f)
+            {
+                extremeLockTimer -= Time.deltaTime;
+            }
+            
             if (playerInRange != null)
             {
                 var mask = playerInRange.CurrentMask;
@@ -195,8 +246,14 @@ namespace MaskCompany
             else
             {
                 // Slowly return to neutral when player not in range
+                // BUT only if the lock timer has expired
                 targetComfort = 0f;
-                comfortLevel = Mathf.MoveTowards(comfortLevel, 0f, comfortDecaySpeed * Time.deltaTime);
+                
+                if (extremeLockTimer <= 0f)
+                {
+                    comfortLevel = Mathf.MoveTowards(comfortLevel, 0f, comfortDecaySpeed * Time.deltaTime);
+                }
+                // else: locked at extreme, no decay
             }
 
             // Clamp
@@ -263,7 +320,8 @@ namespace MaskCompany
             if (rangeIndicator == null || rangeIndicator.sprite == null) return;
 
             float spriteWorldSize = rangeIndicator.sprite.bounds.size.x;
-            float targetDiameter = DetectionRange * 2f;
+            // Visual is larger than actual detection range
+            float targetDiameter = DetectionRange * 2f * visualRangeMultiplier;
             float scale = targetDiameter / spriteWorldSize;
             
             rangeIndicator.transform.localScale = Vector3.one * scale;

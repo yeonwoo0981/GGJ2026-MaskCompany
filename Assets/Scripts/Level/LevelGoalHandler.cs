@@ -10,6 +10,7 @@ namespace MaskCompany
         public static LevelGoalHandler Instance { get; private set; }
 
         [Header("Lives")]
+        [SerializeField] private bool useLives = true;
         [SerializeField] private int maxLives = 3;
         [SerializeField] private int currentLives;
 
@@ -39,6 +40,10 @@ namespace MaskCompany
         [SerializeField] private bool levelFailed;
         [SerializeField] private int goalsCompleted;
 
+        [Header("Control")]
+        [SerializeField] private bool autoStart = true; // Set false for tutorial control
+        private bool initialized;
+
         private void Awake()
         {
             Instance = this;
@@ -47,21 +52,89 @@ namespace MaskCompany
 
         private void Start()
         {
+            // In tutorial mode, TutorialManager will call Initialize() manually
+            // Otherwise, auto-initialize if autoStart is true
+            if (TutorialManager.TutoMode)
+            {
+                Debug.Log("[LevelGoalHandler] Tutorial mode - waiting for manual initialization");
+                return;
+            }
+            
+            if (autoStart)
+            {
+                Initialize();
+            }
+        }
+
+        /// <summary>
+        /// Initialize the level goal system. Called automatically in Start unless in tutorial mode.
+        /// Call manually from TutorialManager to control timing.
+        /// </summary>
+        public void Initialize()
+        {
+            if (initialized) return;
+            initialized = true;
+
             // Auto-find NPCs if list is empty
             if (allNPCs.Count == 0)
             {
                 allNPCs.AddRange(FindObjectsByType<NPCController>(FindObjectsSortMode.None));
             }
 
-            // Subscribe to NPC events
-            foreach (var npc in allNPCs)
+            Debug.Log($"[LevelGoalHandler] Initialized with {allNPCs.Count} NPCs and {goals.Count} goals");
+        }
+
+        /// <summary>
+        /// Set goals externally (for tutorial)
+        /// </summary>
+        public void SetGoals(List<LevelGoal> newGoals)
+        {
+            goals = newGoals;
+        }
+
+        /// <summary>
+        /// Add a single goal
+        /// </summary>
+        public void AddGoal(LevelGoal goal)
+        {
+            goals.Add(goal);
+        }
+
+        /// <summary>
+        /// Clear all goals
+        /// </summary>
+        public void ClearGoals()
+        {
+            goals.Clear();
+        }
+
+        /// <summary>
+        /// Enable or disable lives system (disabled for tutorial)
+        /// </summary>
+        public void SetUseLives(bool use)
+        {
+            useLives = use;
+        }
+
+        /// <summary>
+        /// Reset for a new section (clear completed states, keep goals)
+        /// </summary>
+        public void ResetProgress()
+        {
+            foreach (var goal in goals)
             {
-                // We'll check comfort in Update
+                goal.completed = false;
+                goal.failed = false;
+                goal.progressTimer = 0f;
             }
+            levelComplete = false;
+            levelFailed = false;
+            goalsCompleted = 0;
         }
 
         private void Update()
         {
+            if (!initialized) return;
             if (levelComplete || levelFailed) return;
 
             CheckNPCStates();
@@ -82,6 +155,14 @@ namespace MaskCompany
                     FireNPC(npc);
                 }
             }
+        }
+        
+        /// <summary>
+        /// Force check NPC states immediately (call from Tutorial to ensure firing happens)
+        /// </summary>
+        public void ForceCheckNPCStates()
+        {
+            CheckNPCStates();
         }
 
         private void FireNPC(NPCController npc)
@@ -253,6 +334,8 @@ namespace MaskCompany
 
         private void LoseLife()
         {
+            if (!useLives) return; // Lives disabled (tutorial mode)
+            
             currentLives--;
             Debug.Log($"[LevelGoalHandler] Lost a life! Remaining: {currentLives}");
             

@@ -10,11 +10,11 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 46b799365a73fa84e9700b9ae4677d8c, type: 3}
-  m_Name: Neutral Fish
+  m_Name: Loner Frog
   m_EditorClassIdentifier: Assembly-CSharp::MaskCompany.NPCConfig
-  npcName: Fish
-  sprite: {fileID: 7729768860333772239, guid: b66832cb2931f0e4bb94976d866e54ff, type: 3}
-  personality: 0
+  npcName: Loner Frog
+  sprite: {fileID: 1893670189769602202, guid: b66832cb2931f0e4bb94976d866e54ff, type: 3}
+  personality: 3
   moveSpeed: 2
-  detectionRange: 3
+  detectionRange: 2
   tintColor: {r: 1, g: 1, b: 1, a: 1}

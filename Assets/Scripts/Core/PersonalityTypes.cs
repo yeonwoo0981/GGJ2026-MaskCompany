@@ -27,10 +27,22 @@ namespace MaskCompany
     public enum CompatibilityResult
     {
         Great,      // ++ (strong positive, 1.5x speed)
-        Good,       // +  (positive, 0.5x speed)
+        Good,       // +  (positive)
         Neutral,    // o  (pushes toward 0)
-        Bad,        // -  (negative, 0.5x speed)
+        Bad,        // -  (negative)
         VeryBad     // -- (strong negative, 1.5x speed)
+    }
+    
+    /// <summary>
+    /// Global settings for mask influence - easy to tweak!
+    /// </summary>
+    public static class MaskSettings
+    {
+        /// <summary>
+        /// Global multiplier for ALL mask influence speeds. 
+        /// 1.0 = normal, 0.5 = twice slower, 2.0 = twice faster
+        /// </summary>
+        public static float GlobalSpeedMultiplier = 0.5f;  // Currently set to half speed (twice slower)
     }
 
     public static class PersonalitySystem
@@ -117,6 +129,7 @@ namespace MaskCompany
         /// <summary>
         /// Get influence speed multiplier based on result strength and mask type.
         /// Harsh (++/--) = 1.5x, Normal (+/-/o) = 1x, Neutral mask = 0.5x multiplier
+        /// All values are then multiplied by MaskSettings.GlobalSpeedMultiplier
         /// </summary>
         public static float GetInfluenceSpeed(MaskType mask, CompatibilityResult result)
         {
@@ -136,7 +149,8 @@ namespace MaskCompany
                 baseSpeed *= 0.5f;
             }
 
-            return baseSpeed;
+            // Apply global speed multiplier for easy balancing
+            return baseSpeed * MaskSettings.GlobalSpeedMultiplier;
         }
 
         public static float GetTargetComfort(CompatibilityResult result)

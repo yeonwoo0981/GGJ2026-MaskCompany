@@ -53,7 +53,6 @@ namespace MaskCompany
                 if (slot.image != null)
                 {
                     slot.image.sprite = GetMaskSprite(slot.maskType);
-                    slot.image.color = PlayerController.GetMaskColor(slot.maskType);
                 }
                 if (slot.keyText != null)
                 {
@@ -88,7 +87,6 @@ namespace MaskCompany
             if (currentMaskImage != null)
             {
                 currentMaskImage.sprite = GetMaskSprite(current);
-                currentMaskImage.color = PlayerController.GetMaskColor(current);
             }
 
             if (currentMaskText != null)

@@ -110,7 +110,11 @@ namespace MaskCompany
 
         private void CreateGoalsDisplay()
         {
-            if (goalsContainer == null || goalItemPrefab == null) return;
+            if (goalsContainer == null || goalItemPrefab == null)
+            {
+                Debug.LogWarning($"[LevelGoalUI] CreateGoalsDisplay: goalsContainer={goalsContainer}, goalItemPrefab={goalItemPrefab}");
+                return;
+            }
 
             // Clear existing
             foreach (Transform child in goalsContainer)
@@ -121,6 +125,8 @@ namespace MaskCompany
 
             // Create goal items
             var goals = goalHandler.GetGoals();
+            Debug.Log($"[LevelGoalUI] CreateGoalsDisplay: {goals.Count} goals to display");
+            
             foreach (var goal in goals)
             {
                 GameObject item = Instantiate(goalItemPrefab, goalsContainer);
@@ -129,8 +135,32 @@ namespace MaskCompany
                 {
                     uiItem.Setup(goal);
                     goalItems.Add(uiItem);
+                    Debug.Log($"[LevelGoalUI] Created goal item for: {goal.goalName}");
                 }
             }
+        }
+        
+        /// <summary>
+        /// Call this to refresh the goals display after goals have been changed
+        /// </summary>
+        public void RefreshGoalsDisplay()
+        {
+            if (goalHandler == null)
+            {
+                goalHandler = LevelGoalHandler.Instance;
+                Debug.Log($"[LevelGoalUI] RefreshGoalsDisplay: got handler from Instance = {goalHandler}");
+            }
+            
+            if (goalHandler == null)
+            {
+                Debug.LogWarning("[LevelGoalUI] RefreshGoalsDisplay: No LevelGoalHandler found!");
+                return;
+            }
+            
+            var goals = goalHandler.GetGoals();
+            Debug.Log($"[LevelGoalUI] RefreshGoalsDisplay: Handler has {goals.Count} goals");
+            
+            CreateGoalsDisplay();
         }
 
         private void Update()
