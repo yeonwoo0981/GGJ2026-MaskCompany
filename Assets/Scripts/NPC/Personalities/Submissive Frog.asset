@@ -1,0 +1,20 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 46b799365a73fa84e9700b9ae4677d8c, type: 3}
+  m_Name: Submissive Frog
+  m_EditorClassIdentifier: Assembly-CSharp::MaskCompany.NPCConfig
+  npcName: Sumissive Frog
+  sprite: {fileID: 1893670189769602202, guid: b66832cb2931f0e4bb94976d866e54ff, type: 3}
+  personality: 2
+  moveSpeed: 2
+  detectionRange: 3
+  tintColor: {r: 1, g: 1, b: 1, a: 1}

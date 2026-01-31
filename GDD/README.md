@@ -51,12 +51,17 @@
 
 ### Day 1 - Core Gameplay
 
-- [ ] Player 8-directional movement
-- [ ] 4 personality masks (Agreeable, Assertive, Analytical, Expressive)
-- [ ] Mask switching (scroll wheel + number keys)
-- [ ] NPC with personality types (Dominant, Submissive, Friendly, Hostile, Neutral)
-- [ ] NPC detection system (proximity-based)
-- [ ] Compatibility matrix (mask + NPC personality = result)
+- [x] Player 8-directional movement (WASD)
+- [x] 4 personality masks (Agreeable, Assertive, Analytical, Expressive)
+- [x] Mask switching (1, 2, 3, 4 keys)
+- [x] Player color changes with mask
+- [x] NPC with personality types (Dominant, Submissive, Friendly, Hostile, Neutral)
+- [x] NPC detection system (proximity-based with gradient range indicator)
+- [x] Compatibility matrix (mask + NPC personality = result)
+- [x] **Gradual comfort system** (emotions evolve over time, not instant)
+- [x] NPC breathing animation (DOTween, speed based on comfort)
+- [x] NPC particles (configurable per emotion state)
+- [x] ScriptableObjects: NPCConfig, NPCCollection, ParticleConfig
 - [ ] Basic win condition (reach exit)
 - [ ] Basic lose condition (bad match detected)
 
@@ -69,8 +74,8 @@
 - [ ] Level complete screen
 - [ ] Game over screen
 - [ ] NPC patrol behavior
-- [ ] Visual feedback (detection warning, personality hints)
-- [ ] NPC reaction animations (Happy, Neutral, Suspicious, Upset)
+- [x] Visual feedback (range color tints based on comfort)
+- [x] NPC reaction particles (Happy, Risky, Angry states)
 
 ### Day 3 - Extra
 
@@ -232,3 +237,5 @@ Assets/
 | ------- | ---------- | ------------------- |
 | 0.1     | 2026-01-30 | Initial GDD created |
 | 0.2     | 2026-01-30 | Added personality-based mask system, compatibility matrix, interaction types |
+| 0.3     | 2026-01-30 | Implemented: PlayerController, NPCController, PersonalityTypes |
+| 0.4     | 2026-01-30 | Added: NPCConfig, NPCCollection, ParticleConfig SOs, gradual comfort system, breathing animation, emotion particles |
