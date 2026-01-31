@@ -2,6 +2,8 @@
 using DG.Tweening;
 using TMPro;
 using UnityEngine;
+using UnityEngine.Events;
+using UnityEngine.InputSystem;
 using UnityEngine.SceneManagement;
 
 namespace Work.Yeonwoo._01_Scripts.ETC
@@ -9,7 +11,8 @@ namespace Work.Yeonwoo._01_Scripts.ETC
     public class UIAppearance : MonoBehaviour
     {
         private TextMeshProUGUI _text;
-
+        public UnityEvent OnPressStart;
+        
         private void Awake()
         {
             _text = GetComponent<TextMeshProUGUI>();
@@ -19,14 +22,16 @@ namespace Work.Yeonwoo._01_Scripts.ETC
         {
             _text.DOFade(1.0f, 1.5f).SetEase(Ease.OutSine)
                 .OnComplete(() =>
-                    _text.DOFade(0f, 0.5f)
+                    _text.DOFade(0f, 1f)
                         .SetLoops(-1, LoopType.Yoyo));
         }
 
         private void Update()
         {
-            if (Input.GetKeyDown(KeyCode.Space))
-                SceneManager.LoadScene(1);
+            if (Keyboard.current.spaceKey.wasPressedThisFrame)
+            {
+                OnPressStart?.Invoke();
+            }
         }
     }
 }
