@@ -51,12 +51,17 @@
 
 ### Day 1 - Core Gameplay
 
-- [ ] Player 8-directional movement
-- [ ] 4 personality masks (Agreeable, Assertive, Analytical, Expressive)
-- [ ] Mask switching (scroll wheel + number keys)
-- [ ] NPC with personality types (Dominant, Submissive, Friendly, Hostile, Neutral)
-- [ ] NPC detection system (proximity-based)
-- [ ] Compatibility matrix (mask + NPC personality = result)
+- [x] Player 8-directional movement (WASD)
+- [x] 4 personality masks (Agreeable, Assertive, Analytical, Expressive)
+- [x] Mask switching (1, 2, 3, 4 keys)
+- [x] Player color changes with mask
+- [x] NPC with personality types (Dominant, Submissive, Friendly, Hostile, Neutral)
+- [x] NPC detection system (proximity-based with gradient range indicator)
+- [x] Compatibility matrix (mask + NPC personality = result)
+- [x] **Gradual comfort system** (emotions evolve over time, not instant)
+- [x] NPC breathing animation (DOTween, speed based on comfort)
+- [x] NPC particles (configurable per emotion state)
+- [x] ScriptableObjects: NPCConfig, NPCCollection, ParticleConfig
 - [ ] Basic win condition (reach exit)
 - [ ] Basic lose condition (bad match detected)
 
@@ -69,8 +74,8 @@
 - [ ] Level complete screen
 - [ ] Game over screen
 - [ ] NPC patrol behavior
-- [ ] Visual feedback (detection warning, personality hints)
-- [ ] NPC reaction animations (Happy, Neutral, Suspicious, Upset)
+- [x] Visual feedback (range color tints based on comfort)
+- [x] NPC reaction particles (Great, Good, Neutral, Bad, VeryBad states)
 
 ### Day 3 - Extra
 
@@ -117,18 +122,34 @@
 
 ## Key Mechanics Summary
 
-### Personality-Based Mask System
+### Emotion Mask System (Inside Out Inspired)
 
-Player masks represent **personality traits**, NPCs have **personality types**:
+**Player Masks:**
+| Mask | Color | Key |
+|------|-------|-----|
+| 😄 **Joy** | Yellow | 1 |
+| 😐 **Neutral** | Blue | 2 |
+| 😠 **Anger** | Red | 3 |
+| 😨 **Fear** | Purple | 4 |
 
-| Player Mask    | Best With       | Worst With |
-| -------------- | --------------- | ---------- |
-| **Agreeable**  | Dominant, Submissive | Hostile    |
-| **Assertive**  | Hostile, Dominant    | Submissive |
-| **Analytical** | Neutral, Hostile     | Dominant   |
-| **Expressive** | Friendly             | Hostile    |
+**NPC Personalities & Compatibility:**
 
-*Full compatibility matrix in [System 12](./Systems/12_Personality_Interactions.md)*
+|  | Joy | Neutral | Anger | Fear |
+|--|:---:|:-------:|:-----:|:----:|
+| **Angry** | -- | + | o | + |
+| **Cool** | ++ | - | - | - |
+| **Weird** | + | - | o | - |
+| **Loner** | o | + | - | o |
+| **Lazy** | - | ++ | - | o |
+| **Anxious** | - | + | -- | - |
+| **Friendly** | + | - | - | - |
+| **Scary** | - | o | + | ++ |
+
+`++` Great (1.5x speed) | `+` Good (0.5x speed) | `o` Neutral (→0) | `-` Bad (0.5x speed) | `--` Very Bad (1.5x speed)
+
+*Note: Neutral mask has half influence speed. Cool nerfed from `o` to `-` for Neutral mask.*
+
+*Full details in [System 12](./Systems/12_Personality_Interactions.md)*
 
 ### Interaction Types
 - **Proximity** (MVP): Enter NPC detection zone
@@ -232,3 +253,5 @@ Assets/
 | ------- | ---------- | ------------------- |
 | 0.1     | 2026-01-30 | Initial GDD created |
 | 0.2     | 2026-01-30 | Added personality-based mask system, compatibility matrix, interaction types |
+| 0.3     | 2026-01-30 | Implemented: PlayerController, NPCController, PersonalityTypes |
+| 0.4     | 2026-01-30 | Added: NPCConfig, NPCCollection, ParticleConfig SOs, gradual comfort system, breathing animation, emotion particles |

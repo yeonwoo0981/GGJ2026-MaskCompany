@@ -1,0 +1,20 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 98c2b823b94f6874ba410c105386d8e9, type: 3}
+  m_Name: NPCCollection
+  m_EditorClassIdentifier: Assembly-CSharp::MaskCompany.NPCCollection
+  configs:
+  - {fileID: 11400000, guid: f96e32bd4613f7d468b292bc83229096, type: 2}
+  - {fileID: 11400000, guid: 0f0f70142a9d94f4ca94ed7065000668, type: 2}
+  - {fileID: 11400000, guid: 961e4b5314645bb46aae048489437ec1, type: 2}
+  - {fileID: 11400000, guid: 01e8d98ae1a8ac848a2205aa30eff286, type: 2}
+  - {fileID: 11400000, guid: fe239cc462a33354c86edaf35733143a, type: 2}
