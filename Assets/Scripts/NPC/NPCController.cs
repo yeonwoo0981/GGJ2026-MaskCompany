@@ -44,7 +44,8 @@ namespace MaskCompany
         private Tweener breatheTween;
         private ParticleSystem emotionParticles;
         private Vector3 originalScale;
-        private CompatibilityResult lastParticleResult;
+        private CompatibilityResult? lastParticleResult; // Nullable to force first update
+        private bool hasInitialBurst; // Only burst once per NPC lifetime
 
         public PersonalityType Personality => currentConfig != null ? currentConfig.personality : PersonalityType.Loner;
         public float DetectionRange => currentConfig != null ? currentConfig.detectionRange : 3f;
@@ -338,6 +339,7 @@ namespace MaskCompany
             main.startSpeed = 0.3f;
             main.maxParticles = 10;
             main.simulationSpace = ParticleSystemSimulationSpace.World;
+            main.prewarm = false; // No prewarm needed, we control emission manually
 
             var emission = emotionParticles.emission;
             emission.rateOverTime = 0;
@@ -372,6 +374,16 @@ namespace MaskCompany
             var renderer = particleObj.GetComponent<ParticleSystemRenderer>();
             renderer.sortingOrder = 10;
             renderer.material = new Material(Shader.Find("Sprites/Default"));
+            
+            // Set initial sprite from neutral config
+            if (particleConfig != null)
+            {
+                Sprite sprite = particleConfig.neutral.GetRandomSprite();
+                if (sprite != null)
+                {
+                    renderer.material.mainTexture = sprite.texture;
+                }
+            }
         }
 
         private void UpdateParticles()
@@ -384,8 +396,8 @@ namespace MaskCompany
             var noise = emotionParticles.noise;
             var renderer = emotionParticles.GetComponent<ParticleSystemRenderer>();
 
-            // Only emit when player in range - low threshold so particles appear early as warning
-            if (playerInRange == null || Mathf.Abs(comfortLevel) < 0.02f)
+            // No particles when player not in range
+            if (playerInRange == null)
             {
                 emission.rateOverTime = 0;
                 currentParticleRate = 0;
@@ -397,12 +409,16 @@ namespace MaskCompany
                 // Use lerped settings based on comfort level
                 var settings = particleConfig.GetLerpedSettings(comfortLevel);
                 
+                // Always show at least some particles when in range (min 0.2 rate)
+                float minRate = 0.2f;
+                float rate = Mathf.Max(settings.emissionRate, minRate);
+                
                 main.startSpeed = settings.speed;
                 main.startLifetime = settings.lifetime;
                 main.startSize = settings.size;
                 main.startColor = settings.tint;
-                emission.rateOverTime = settings.emissionRate;
-                currentParticleRate = settings.emissionRate;
+                emission.rateOverTime = rate;
+                currentParticleRate = rate;
 
                 // Always use two constants mode for consistency
                 float minY = settings.oscillateVertical ? settings.verticalMovement * -0.5f : settings.verticalMovement * 0.8f;
@@ -420,11 +436,21 @@ namespace MaskCompany
                     noise.enabled = false;
                 }
 
-                // Set sprite only when result category changes
-                if (currentResult != lastParticleResult)
+                // Set sprite based on comfort level with extremes at ±0.6
+                CompatibilityResult spriteResult;
+                if (comfortLevel >= 0.6f)
+                    spriteResult = CompatibilityResult.Great;
+                else if (comfortLevel >= 0f)
+                    spriteResult = CompatibilityResult.Good;
+                else if (comfortLevel > -0.6f)
+                    spriteResult = CompatibilityResult.Bad;
+                else
+                    spriteResult = CompatibilityResult.VeryBad;
+                
+                if (!lastParticleResult.HasValue || spriteResult != lastParticleResult.Value)
                 {
-                    lastParticleResult = currentResult;
-                    var resultSettings = particleConfig.GetSettings(currentResult);
+                    lastParticleResult = spriteResult;
+                    var resultSettings = particleConfig.GetSettings(spriteResult);
                     Sprite sprite = resultSettings.GetRandomSprite();
                     if (sprite != null)
                     {
@@ -485,6 +511,49 @@ namespace MaskCompany
             transform.DOKill(complete: true);
             transform.localScale = originalScale;
             transform.DOPunchScale(Vector3.one * 0.15f, 0.3f, 5).OnComplete(StartBreatheAnimation);
+            
+            // Emit initial burst only once per NPC lifetime
+            if (!hasInitialBurst && emotionParticles != null && useParticles && particleConfig != null)
+            {
+                hasInitialBurst = true;
+                
+                var compatibility = PersonalitySystem.GetCompatibility(player.CurrentMask, Personality);
+                
+                // Simple: positive interaction = good sprite, negative = bad sprite
+                bool isPositive = compatibility == CompatibilityResult.Great || 
+                                  compatibility == CompatibilityResult.Good ||
+                                  compatibility == CompatibilityResult.Neutral;
+                
+                // Nudge comfort immediately so sprite matches interaction
+                // This ensures particles show the right sprite from frame 1
+                if (!isPositive && comfortLevel >= 0f)
+                {
+                    comfortLevel = -0.001f; // Tiny nudge negative
+                }
+                else if (isPositive && comfortLevel < 0f)
+                {
+                    comfortLevel = 0.001f; // Tiny nudge positive
+                }
+                
+                var settings = isPositive ? particleConfig.good : particleConfig.bad;
+                
+                // Set the sprite
+                var renderer = emotionParticles.GetComponent<ParticleSystemRenderer>();
+                Sprite sprite = settings.GetRandomSprite();
+                
+                if (sprite != null)
+                {
+                    renderer.material.mainTexture = sprite.texture;
+                }
+                
+                // Mark so UpdateParticles knows the current state
+                lastParticleResult = isPositive ? CompatibilityResult.Good : CompatibilityResult.Bad;
+                
+                // Emit the burst
+                emotionParticles.Emit(2);
+                
+                Debug.Log($"[{gameObject.name}] Burst {(isPositive ? "positive" : "negative")} → sprite: {(sprite != null ? sprite.name : "null")}");
+            }
         }
 
         private void OnPlayerExitRange()

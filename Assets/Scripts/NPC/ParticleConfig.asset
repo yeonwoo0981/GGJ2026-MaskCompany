@@ -16,8 +16,6 @@ MonoBehaviour:
     sprites:
     - {fileID: 21300000, guid: 355651bb6c1ad0e4f856201e4e2e93a1, type: 3}
     - {fileID: 21300000, guid: 6e59cb33b6402404187f4d16cb47436f, type: 3}
-    - {fileID: 21300000, guid: 1f3b27a510204a041bfd293b3fe3a71f, type: 3}
-    - {fileID: 21300000, guid: a1b8c12eabe032448ab9280a7e8dcf7c, type: 3}
     emissionRate: 0.5
     lifetime: 2.5
     size: 0.6
@@ -28,7 +26,7 @@ MonoBehaviour:
     oscillateVertical: 0
   good:
     sprites:
-    - {fileID: 21300000, guid: a1b8c12eabe032448ab9280a7e8dcf7c, type: 3}
+    - {fileID: 21300000, guid: 1f3b27a510204a041bfd293b3fe3a71f, type: 3}
     emissionRate: 0.3
     lifetime: 2
     size: 0.5
@@ -37,21 +35,32 @@ MonoBehaviour:
     verticalMovement: 0.3
     trembleStrength: 0
     oscillateVertical: 0
-  risky:
+  neutral:
+    sprites:
+    - {fileID: 21300000, guid: a1b8c12eabe032448ab9280a7e8dcf7c, type: 3}
+    emissionRate: 0.2
+    lifetime: 1.8
+    size: 0.45
+    tint: {r: 1, g: 1, b: 1, a: 1}
+    speed: 0.15
+    verticalMovement: 0.15
+    trembleStrength: 0.05
+    oscillateVertical: 0
+  bad:
     sprites:
     - {fileID: 21300000, guid: f6ceba4620ad38e4894bc8c6082f9472, type: 3}
     - {fileID: 21300000, guid: eacdf763e91a44849bd1874689dba4ec, type: 3}
     - {fileID: 21300000, guid: 87f6f5dbce84c6d43a6ff2a06ed3c671, type: 3}
     - {fileID: 21300000, guid: be8026fdfabede34dadfd3bafbae7d38, type: 3}
-    emissionRate: 0.8
-    lifetime: 1.5
-    size: 0.55
+    emissionRate: 1.2
+    lifetime: 1.2
+    size: 0.65
     tint: {r: 1, g: 1, b: 1, a: 1}
-    speed: 0.2
-    verticalMovement: 0.1
-    trembleStrength: 0.3
-    oscillateVertical: 0
-  bad:
+    speed: 0.5
+    verticalMovement: 0.4
+    trembleStrength: 0.6
+    oscillateVertical: 1
+  veryBad:
     sprites:
     - {fileID: 21300000, guid: d996ba1b84b13904f86bdc56bdb01922, type: 3}
     - {fileID: 21300000, guid: 47bd42123187a054d86e956332541cea, type: 3}
