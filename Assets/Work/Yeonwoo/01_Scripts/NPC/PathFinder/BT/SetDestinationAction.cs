@@ -16,7 +16,7 @@ namespace Work.Yeonwoo._01_Scripts.NPC.PathFinder.BT
         
         protected override Status OnStart()
         {
-            Self.Value.get
+            //Self.Value.get
             return Status.Running;
         }
 

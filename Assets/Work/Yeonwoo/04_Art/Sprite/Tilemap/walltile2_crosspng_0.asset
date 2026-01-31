@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 13312, guid: 0000000000000000e000000000000000, type: 0}
   m_Name: walltile2_crosspng_0
   m_EditorClassIdentifier: UnityEngine.dll::UnityEngine.Tilemaps.Tile
-  m_Sprite: {fileID: -8958445296841493576, guid: 256e78a8540c51b48a625b8be112d9a9, type: 3}
+  m_Sprite: {fileID: -8958445296841493576, guid: 16c57f402cc046e42bc35ba5a5a740f8, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_Transform:
     e00: 1
