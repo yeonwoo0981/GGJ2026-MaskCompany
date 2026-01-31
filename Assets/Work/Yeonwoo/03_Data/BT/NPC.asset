@@ -32,15 +32,46 @@ MonoBehaviour:
           rid: 8318103039492489497
         BlackboardGroupReferences: []
         Root:
-          rid: 8318103039492489498
-        m_VersionTimestamp: 639054730413355983
+          rid: 8318103039492489561
+        m_VersionTimestamp: 639054867342752072
     - rid: 8318103039492489497
       type: {class: BlackboardReference, ns: Unity.Behavior, asm: Unity.Behavior}
       data:
         m_Blackboard:
           rid: 8318103039492489499
         m_Source: {fileID: 8172862168143935441}
-    - rid: 8318103039492489498
+    - rid: 8318103039492489499
+      type: {class: Blackboard, ns: Unity.Behavior, asm: Unity.Behavior}
+      data:
+        m_Variables:
+        - rid: 8318103039492489558
+        - rid: 8318103039492489559
+        - rid: 8318103039492489560
+    - rid: 8318103039492489558
+      type: {class: 'BlackboardVariable`1[[UnityEngine.GameObject, UnityEngine.CoreModule]]', ns: Unity.Behavior, asm: Unity.Behavior}
+      data:
+        GUID:
+          m_Value0: 1
+          m_Value1: 0
+        Name: Self
+        m_Value: {fileID: 0}
+    - rid: 8318103039492489559
+      type: {class: 'BlackboardVariable`1[[UnityEngine.Vector3, UnityEngine.CoreModule]]', ns: Unity.Behavior, asm: Unity.Behavior}
+      data:
+        GUID:
+          m_Value0: 10952371535302320504
+          m_Value1: 9283361342000208860
+        Name: NextPosition
+        m_Value: {x: 0, y: 0, z: 0}
+    - rid: 8318103039492489560
+      type: {class: 'BlackboardVariable`1[[Work.Yeonwoo._01_Scripts.NPC.PathFinder.WayPoints, Assembly-CSharp]]', ns: Unity.Behavior, asm: Unity.Behavior}
+      data:
+        GUID:
+          m_Value0: 9090164876558989916
+          m_Value1: 13231182747061517431
+        Name: WayPoints
+        m_Value: {fileID: 0}
+    - rid: 8318103039492489561
       type: {class: Start, ns: Unity.Behavior, asm: Unity.Behavior}
       data:
         ID:
@@ -51,22 +82,23 @@ MonoBehaviour:
         m_Parent:
           rid: -2
         m_Child:
-          rid: -2
-        Repeat: 1
+          rid: 8318103039492489562
+        Repeat: 0
         AllowMultipleRepeatsPerTick: 0
-    - rid: 8318103039492489499
-      type: {class: Blackboard, ns: Unity.Behavior, asm: Unity.Behavior}
+    - rid: 8318103039492489562
+      type: {class: GetNextWayPointAction, ns: Work.Yeonwoo._01_Scripts.NPC.PathFinder.BT, asm: Assembly-CSharp}
       data:
-        m_Variables:
-        - rid: 8318103039492489500
-    - rid: 8318103039492489500
-      type: {class: 'BlackboardVariable`1[[UnityEngine.GameObject, UnityEngine.CoreModule]]', ns: Unity.Behavior, asm: Unity.Behavior}
-      data:
-        GUID:
-          m_Value0: 1
-          m_Value1: 0
-        Name: Self
-        m_Value: {fileID: 0}
+        ID:
+          m_Value0: 12408021694271330378
+          m_Value1: 6955011125970107376
+        Graph:
+          rid: 8318103039492489496
+        m_Parent:
+          rid: 8318103039492489561
+        NextPathPoint:
+          rid: 8318103039492489559
+        WayPoints:
+          rid: 8318103039492489560
 --- !u!114 &11400000
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -83,7 +115,8 @@ MonoBehaviour:
   m_Description: 
   m_Nodes:
   - rid: 8318103039492489501
-  m_VersionTimestamp: 639054730413355983
+  - rid: 8318103039492489516
+  m_VersionTimestamp: 639054867342752072
   m_SerializedVersion: 2
   m_DebugInfo: {fileID: 4999959263645081437}
   m_RuntimeGraph: {fileID: -6062913424963652654}
@@ -103,6 +136,26 @@ MonoBehaviour:
       m_Value0: 3335272451348827663
       m_Value1: 11549843281177505721
     Variables: []
+    NamedChildren: []
+    IsPlaceholder: 0
+  - Name: GetNextWayPoint
+    Story: 'Get [NextPathPoint] from [WayPoints]'
+    RuntimeTypeString: Work.Yeonwoo._01_Scripts.NPC.PathFinder.BT.GetNextWayPointAction,
+      Assembly-CSharp, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+    RuntimeTypeID:
+      m_Value0: 6710084301149198556
+      m_Value1: 5119766234099080204
+    Variables:
+    - Name: NextPathPoint
+      Type:
+        m_SerializableType: UnityEngine.Vector3, UnityEngine.CoreModule, Version=0.0.0.0,
+          Culture=neutral, PublicKeyToken=null
+      Tooltip: 
+    - Name: WayPoints
+      Type:
+        m_SerializableType: Work.Yeonwoo._01_Scripts.NPC.PathFinder.WayPoints, Assembly-CSharp,
+          Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+      Tooltip: 
     NamedChildren: []
     IsPlaceholder: 0
   m_Blackboards: []
@@ -133,7 +186,7 @@ MonoBehaviour:
           m_Value0: 3335272451348827663
           m_Value1: 11549843281177505721
         m_FieldValues: []
-        Repeat: 1
+        Repeat: 0
         AllowMultipleRepeatsPerTick: 0
     - rid: 8318103039492489502
       type: {class: PortModel, ns: Unity.Behavior.GraphFramework, asm: Unity.Behavior.GraphFramework}
@@ -143,7 +196,105 @@ MonoBehaviour:
         m_IsFloating: 0
         m_NodeModel:
           rid: 8318103039492489501
+        m_Connections:
+        - rid: 8318103039492489517
+    - rid: 8318103039492489516
+      type: {class: ActionNodeModel, ns: Unity.Behavior, asm: Unity.Behavior.Authoring}
+      data:
+        Position: {x: 85.143555, y: 206.56038}
+        ID:
+          m_Value0: 12408021694271330378
+          m_Value1: 6955011125970107376
+        Parents: []
+        PortModels:
+        - rid: 8318103039492489517
+        - rid: 8318103039492489518
+        NodeType:
+          m_SerializableType: Work.Yeonwoo._01_Scripts.NPC.PathFinder.BT.GetNextWayPointAction,
+            Assembly-CSharp, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+        NodeTypeID:
+          m_Value0: 6710084301149198556
+          m_Value1: 5119766234099080204
+        m_FieldValues:
+        - rid: 8318103039492489519
+        - rid: 8318103039492489520
+    - rid: 8318103039492489517
+      type: {class: PortModel, ns: Unity.Behavior.GraphFramework, asm: Unity.Behavior.GraphFramework}
+      data:
+        m_Name: InputPort
+        m_PortDataFlowType: 0
+        m_IsFloating: 0
+        m_NodeModel:
+          rid: 8318103039492489516
+        m_Connections:
+        - rid: 8318103039492489502
+    - rid: 8318103039492489518
+      type: {class: PortModel, ns: Unity.Behavior.GraphFramework, asm: Unity.Behavior.GraphFramework}
+      data:
+        m_Name: OutputPort
+        m_PortDataFlowType: 1
+        m_IsFloating: 0
+        m_NodeModel:
+          rid: 8318103039492489516
         m_Connections: []
+    - rid: 8318103039492489519
+      type: {class: BehaviorGraphNodeModel/FieldModel, ns: Unity.Behavior, asm: Unity.Behavior.Authoring}
+      data:
+        FieldName: NextPathPoint
+        Type:
+          m_SerializableType: UnityEngine.Vector3, UnityEngine.CoreModule, Version=0.0.0.0,
+            Culture=neutral, PublicKeyToken=null
+        LocalValue:
+          rid: 8318103039492489521
+        LinkedVariable:
+          rid: 8318103039492489540
+    - rid: 8318103039492489520
+      type: {class: BehaviorGraphNodeModel/FieldModel, ns: Unity.Behavior, asm: Unity.Behavior.Authoring}
+      data:
+        FieldName: WayPoints
+        Type:
+          m_SerializableType: Work.Yeonwoo._01_Scripts.NPC.PathFinder.WayPoints,
+            Assembly-CSharp, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+        LocalValue:
+          rid: 8318103039492489522
+        LinkedVariable:
+          rid: 8318103039492489556
+    - rid: 8318103039492489521
+      type: {class: 'BlackboardVariable`1[[UnityEngine.Vector3, UnityEngine.CoreModule]]', ns: Unity.Behavior, asm: Unity.Behavior}
+      data:
+        GUID:
+          m_Value0: 0
+          m_Value1: 0
+        Name: 
+        m_Value: {x: 0, y: 0, z: 0}
+    - rid: 8318103039492489522
+      type: {class: 'BlackboardVariable`1[[Work.Yeonwoo._01_Scripts.NPC.PathFinder.WayPoints, Assembly-CSharp]]', ns: Unity.Behavior, asm: Unity.Behavior}
+      data:
+        GUID:
+          m_Value0: 0
+          m_Value1: 0
+        Name: 
+        m_Value: {fileID: 0}
+    - rid: 8318103039492489540
+      type: {class: 'TypedVariableModel`1[[UnityEngine.Vector3, UnityEngine.CoreModule]]', ns: Unity.Behavior.GraphFramework, asm: Unity.Behavior.GraphFramework}
+      data:
+        ID:
+          m_Value0: 10952371535302320504
+          m_Value1: 9283361342000208860
+        Name: NextPosition
+        IsExposed: 1
+        m_IsShared: 0
+        m_Value: {x: 0, y: 0, z: 0}
+    - rid: 8318103039492489556
+      type: {class: 'TypedVariableModel`1[[Work.Yeonwoo._01_Scripts.NPC.PathFinder.WayPoints, Assembly-CSharp]]', ns: Unity.Behavior.GraphFramework, asm: Unity.Behavior.GraphFramework}
+      data:
+        ID:
+          m_Value0: 9090164876558989916
+          m_Value1: 13231182747061517431
+        Name: WayPoints
+        IsExposed: 1
+        m_IsShared: 0
+        m_Value: {fileID: 0}
 --- !u!114 &1599150115367668879
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -157,11 +308,13 @@ MonoBehaviour:
   m_Name: NPC Blackboard
   m_EditorClassIdentifier: Unity.Behavior.Authoring::Unity.Behavior.BehaviorBlackboardAuthoringAsset
   AssetID:
-    m_Value0: 0
-    m_Value1: 0
+    m_Value0: 13009472186469820396
+    m_Value1: 8058021532093420552
   m_Variables:
   - rid: 8318103039492489503
-  m_VersionTimestamp: 639054730413258712
+  - rid: 8318103039492489526
+  - rid: 8318103039492489546
+  m_VersionTimestamp: 639054867185760836
   m_CommandBuffer:
     m_Commands: []
   m_RuntimeBlackboardAsset: {fileID: 8172862168143935441}
@@ -175,6 +328,26 @@ MonoBehaviour:
           m_Value0: 1
           m_Value1: 0
         Name: Self
+        IsExposed: 1
+        m_IsShared: 0
+        m_Value: {fileID: 0}
+    - rid: 8318103039492489526
+      type: {class: 'TypedVariableModel`1[[UnityEngine.Vector3, UnityEngine.CoreModule]]', ns: Unity.Behavior.GraphFramework, asm: Unity.Behavior.GraphFramework}
+      data:
+        ID:
+          m_Value0: 10952371535302320504
+          m_Value1: 9283361342000208860
+        Name: NextPosition
+        IsExposed: 1
+        m_IsShared: 0
+        m_Value: {x: 0, y: 0, z: 0}
+    - rid: 8318103039492489546
+      type: {class: 'TypedVariableModel`1[[Work.Yeonwoo._01_Scripts.NPC.PathFinder.WayPoints, Assembly-CSharp]]', ns: Unity.Behavior.GraphFramework, asm: Unity.Behavior.GraphFramework}
+      data:
+        ID:
+          m_Value0: 9090164876558989916
+          m_Value1: 13231182747061517431
+        Name: WayPoints
         IsExposed: 1
         m_IsShared: 0
         m_Value: {fileID: 0}
@@ -203,13 +376,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5c02bb70996b49eba31d0c206e28da24, type: 3}
   m_Name: NPC Blackboard
   m_EditorClassIdentifier: Unity.Behavior::Unity.Behavior.RuntimeBlackboardAsset
-  VersionTimestamp: 639054730413258712
+  VersionTimestamp: 639054867185760836
   AssetID:
-    m_Value0: 0
-    m_Value1: 0
+    m_Value0: 13009472186469820396
+    m_Value1: 8058021532093420552
   m_Blackboard:
     m_Variables:
     - rid: 8318103039492489504
+    - rid: 8318103039492489531
+    - rid: 8318103039492489551
   m_SharedBlackboardVariableGuids: []
   references:
     version: 2
@@ -221,4 +396,20 @@ MonoBehaviour:
           m_Value0: 1
           m_Value1: 0
         Name: Self
+        m_Value: {fileID: 0}
+    - rid: 8318103039492489531
+      type: {class: 'BlackboardVariable`1[[UnityEngine.Vector3, UnityEngine.CoreModule]]', ns: Unity.Behavior, asm: Unity.Behavior}
+      data:
+        GUID:
+          m_Value0: 10952371535302320504
+          m_Value1: 9283361342000208860
+        Name: NextPosition
+        m_Value: {x: 0, y: 0, z: 0}
+    - rid: 8318103039492489551
+      type: {class: 'BlackboardVariable`1[[Work.Yeonwoo._01_Scripts.NPC.PathFinder.WayPoints, Assembly-CSharp]]', ns: Unity.Behavior, asm: Unity.Behavior}
+      data:
+        GUID:
+          m_Value0: 9090164876558989916
+          m_Value1: 13231182747061517431
+        Name: WayPoints
         m_Value: {fileID: 0}
