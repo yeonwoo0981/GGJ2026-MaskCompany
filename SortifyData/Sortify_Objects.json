@@ -4,13 +4,13 @@
             "colors": [],
             "styles": [],
             "showComponents": [],
-            "sceneName": "Dev"
+            "sceneName": "Game"
         },
         {
             "colors": [],
             "styles": [],
             "showComponents": [],
-            "sceneName": "Game"
+            "sceneName": "Dev"
         }
     ]
 }

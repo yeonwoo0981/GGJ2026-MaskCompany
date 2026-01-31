@@ -32,8 +32,8 @@ MonoBehaviour:
           rid: 8318103039492489497
         BlackboardGroupReferences: []
         Root:
-          rid: 8318103039492489561
-        m_VersionTimestamp: 639054867342752072
+          rid: 8318103039492489575
+        m_VersionTimestamp: 639054906066626636
     - rid: 8318103039492489497
       type: {class: BlackboardReference, ns: Unity.Behavior, asm: Unity.Behavior}
       data:
@@ -71,7 +71,7 @@ MonoBehaviour:
           m_Value1: 13231182747061517431
         Name: WayPoints
         m_Value: {fileID: 0}
-    - rid: 8318103039492489561
+    - rid: 8318103039492489575
       type: {class: Start, ns: Unity.Behavior, asm: Unity.Behavior}
       data:
         ID:
@@ -82,10 +82,10 @@ MonoBehaviour:
         m_Parent:
           rid: -2
         m_Child:
-          rid: 8318103039492489562
+          rid: 8318103039492489576
         Repeat: 0
         AllowMultipleRepeatsPerTick: 0
-    - rid: 8318103039492489562
+    - rid: 8318103039492489576
       type: {class: GetNextWayPointAction, ns: Work.Yeonwoo._01_Scripts.NPC.PathFinder.BT, asm: Assembly-CSharp}
       data:
         ID:
@@ -94,7 +94,7 @@ MonoBehaviour:
         Graph:
           rid: 8318103039492489496
         m_Parent:
-          rid: 8318103039492489561
+          rid: 8318103039492489575
         NextPathPoint:
           rid: 8318103039492489559
         WayPoints:
@@ -116,7 +116,8 @@ MonoBehaviour:
   m_Nodes:
   - rid: 8318103039492489501
   - rid: 8318103039492489516
-  m_VersionTimestamp: 639054867342752072
+  - rid: 8318103039492489567
+  m_VersionTimestamp: 639054906066626636
   m_SerializedVersion: 2
   m_DebugInfo: {fileID: 4999959263645081437}
   m_RuntimeGraph: {fileID: -6062913424963652654}
@@ -158,6 +159,26 @@ MonoBehaviour:
       Tooltip: 
     NamedChildren: []
     IsPlaceholder: 0
+  - Name: Set destination
+    Story: '[Self] navigate to [NextPosition]'
+    RuntimeTypeString: SetDestinationAction, Assembly-CSharp, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+    RuntimeTypeID:
+      m_Value0: 1418604685938794433
+      m_Value1: 13641907835515163698
+    Variables:
+    - Name: Self
+      Type:
+        m_SerializableType: Work.Yeonwoo._01_Scripts.NPC.PathFinder.Agent, Assembly-CSharp,
+          Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+      Tooltip: 
+    - Name: NextPosition
+      Type:
+        m_SerializableType: UnityEngine.Vector3, UnityEngine.CoreModule, Version=0.0.0.0,
+          Culture=neutral, PublicKeyToken=null
+      Tooltip: 
+    NamedChildren: []
+    IsPlaceholder: 0
   m_Blackboards: []
   m_MainBlackboardAuthoringAsset: {fileID: 1599150115367668879}
   m_CommandBuffer:
@@ -169,6 +190,8 @@ MonoBehaviour:
   references:
     version: 2
     RefIds:
+    - rid: -2
+      type: {class: , ns: , asm: }
     - rid: 8318103039492489501
       type: {class: StartNodeModel, ns: Unity.Behavior, asm: Unity.Behavior.Authoring}
       data:
@@ -295,6 +318,92 @@ MonoBehaviour:
         IsExposed: 1
         m_IsShared: 0
         m_Value: {fileID: 0}
+    - rid: 8318103039492489567
+      type: {class: ActionNodeModel, ns: Unity.Behavior, asm: Unity.Behavior.Authoring}
+      data:
+        Position: {x: -177.36029, y: 261.76764}
+        ID:
+          m_Value0: 2794116272650117001
+          m_Value1: 4431212926370829013
+        Parents: []
+        PortModels:
+        - rid: 8318103039492489568
+        - rid: 8318103039492489569
+        NodeType:
+          m_SerializableType: SetDestinationAction, Assembly-CSharp, Version=0.0.0.0,
+            Culture=neutral, PublicKeyToken=null
+        NodeTypeID:
+          m_Value0: 1418604685938794433
+          m_Value1: 13641907835515163698
+        m_FieldValues:
+        - rid: 8318103039492489570
+        - rid: 8318103039492489571
+    - rid: 8318103039492489568
+      type: {class: PortModel, ns: Unity.Behavior.GraphFramework, asm: Unity.Behavior.GraphFramework}
+      data:
+        m_Name: InputPort
+        m_PortDataFlowType: 0
+        m_IsFloating: 0
+        m_NodeModel:
+          rid: 8318103039492489567
+        m_Connections: []
+    - rid: 8318103039492489569
+      type: {class: PortModel, ns: Unity.Behavior.GraphFramework, asm: Unity.Behavior.GraphFramework}
+      data:
+        m_Name: OutputPort
+        m_PortDataFlowType: 1
+        m_IsFloating: 0
+        m_NodeModel:
+          rid: 8318103039492489567
+        m_Connections: []
+    - rid: 8318103039492489570
+      type: {class: BehaviorGraphNodeModel/FieldModel, ns: Unity.Behavior, asm: Unity.Behavior.Authoring}
+      data:
+        FieldName: Self
+        Type:
+          m_SerializableType: Work.Yeonwoo._01_Scripts.NPC.PathFinder.Agent, Assembly-CSharp,
+            Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+        LocalValue:
+          rid: 8318103039492489572
+        LinkedVariable:
+          rid: -2
+    - rid: 8318103039492489571
+      type: {class: BehaviorGraphNodeModel/FieldModel, ns: Unity.Behavior, asm: Unity.Behavior.Authoring}
+      data:
+        FieldName: NextPosition
+        Type:
+          m_SerializableType: UnityEngine.Vector3, UnityEngine.CoreModule, Version=0.0.0.0,
+            Culture=neutral, PublicKeyToken=null
+        LocalValue:
+          rid: 8318103039492489573
+        LinkedVariable:
+          rid: 8318103039492489574
+    - rid: 8318103039492489572
+      type: {class: 'BlackboardVariable`1[[Work.Yeonwoo._01_Scripts.NPC.PathFinder.Agent, Assembly-CSharp]]', ns: Unity.Behavior, asm: Unity.Behavior}
+      data:
+        GUID:
+          m_Value0: 0
+          m_Value1: 0
+        Name: 
+        m_Value: {fileID: 0}
+    - rid: 8318103039492489573
+      type: {class: 'BlackboardVariable`1[[UnityEngine.Vector3, UnityEngine.CoreModule]]', ns: Unity.Behavior, asm: Unity.Behavior}
+      data:
+        GUID:
+          m_Value0: 0
+          m_Value1: 0
+        Name: 
+        m_Value: {x: 0, y: 0, z: 0}
+    - rid: 8318103039492489574
+      type: {class: 'TypedVariableModel`1[[UnityEngine.Vector3, UnityEngine.CoreModule]]', ns: Unity.Behavior.GraphFramework, asm: Unity.Behavior.GraphFramework}
+      data:
+        ID:
+          m_Value0: 10952371535302320504
+          m_Value1: 9283361342000208860
+        Name: NextPosition
+        IsExposed: 1
+        m_IsShared: 0
+        m_Value: {x: 0, y: 0, z: 0}
 --- !u!114 &1599150115367668879
 MonoBehaviour:
   m_ObjectHideFlags: 1
