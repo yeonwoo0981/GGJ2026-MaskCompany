@@ -26,7 +26,7 @@ namespace MaskCompany
 
         [Header("Thresholds")]
         [SerializeField] private float firedThreshold = -0.95f; // Comfort below this = fired
-        [SerializeField] private float befriendThreshold = 0.9f; // Comfort above this = befriended
+        [SerializeField] private float befriendThreshold = 1f; // Comfort must reach max to befriend
 
         [Header("Events")]
         public Action<int> OnLivesChanged;
@@ -169,23 +169,23 @@ namespace MaskCompany
         {
             Debug.Log($"[LevelGoalHandler] {npc.name} got FIRED!");
 
-            // Check if this NPC was a "don't fire" target
-            bool wasProtected = false;
+            // Check if this NPC was a goal target
+            bool wasFireGoal = false;
             foreach (var goal in goals)
             {
                 if (goal.targetNPC == npc && goal.goalType == GoalType.Befriend)
                 {
-                    wasProtected = true;
                     goal.failed = true;
                 }
                 if (goal.targetNPC == npc && goal.goalType == GoalType.Fire)
                 {
+                    wasFireGoal = true;
                     goal.completed = true;
                 }
             }
 
-            // Lose a life if we fired someone we shouldn't have
-            if (wasProtected)
+            // Lose a life for ANY fired NPC, unless the goal was specifically to fire them
+            if (!wasFireGoal)
             {
                 LoseLife();
             }
@@ -279,6 +279,19 @@ namespace MaskCompany
                     goal.completed = true;
                 }
             }
+
+            // Hide range and particles
+            npc.HideInteractionVisuals();
+            npc.enabled = false;
+            
+            // Remove from active NPCs list
+            allNPCs.Remove(npc);
+            
+            // Disable GameObject after fade completes (0.3s fade + small buffer)
+            GameObject npcObject = npc.gameObject;
+            DOVirtual.DelayedCall(0.4f, () => {
+                if (npcObject != null) npcObject.SetActive(false);
+            });
 
             OnNPCBefriended?.Invoke(npc);
         }

@@ -42,7 +42,7 @@ namespace MaskCompany
         /// Global multiplier for ALL mask influence speeds. 
         /// 1.0 = normal, 0.5 = twice slower, 2.0 = twice faster
         /// </summary>
-        public static float GlobalSpeedMultiplier = 0.5f;  // Currently set to half speed (twice slower)
+        public static float GlobalSpeedMultiplier = 0.75f;  // 0.75x speed
     }
 
     public static class PersonalitySystem

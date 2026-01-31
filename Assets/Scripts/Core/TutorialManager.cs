@@ -872,10 +872,9 @@ namespace MaskCompany
                 enabledCount++;
                 
                 // Check if NPC reached extreme
-                // Happy >= 0.9 (befriend threshold) or Sad <= -0.95 (fired threshold)
-                // Using -0.95 to ensure NPC actually gets fired before room ends
+                // Happy >= 1 (befriend threshold) or Sad <= -0.95 (fired threshold)
                 float comfort = npc.ComfortLevel;
-                if (comfort >= 0.9f || comfort <= -0.95f)
+                if (comfort >= 1f || comfort <= -0.95f)
                 {
                     completeCount++;
                 }
