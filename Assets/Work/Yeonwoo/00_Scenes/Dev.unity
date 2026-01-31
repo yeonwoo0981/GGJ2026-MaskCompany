@@ -602,7 +602,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f23348dc92524ed68af78c46154ac91a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Work.Yeonwoo._01_Scripts.PC.PlayerMove
-  <Movement>k__BackingField: {fileID: 0}
+  <Movement>k__BackingField: {fileID: 11400000, guid: be9ab5adc8fd5994bad190219dfab450, type: 2}
   currentSpeed: 5
 --- !u!114 &1697269255
 MonoBehaviour:
@@ -961,6 +961,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: baf220c4f17a4b59a50ee4b2970aca1f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Work.Yeonwoo._01_Scripts.NPC.DogNpc
+  maskType: 0
+  typeSO: {fileID: 11400000, guid: f1399cfcfe4798d4ab0785452b6212a4, type: 2}
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0

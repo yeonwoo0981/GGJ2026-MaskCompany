@@ -10,12 +10,12 @@ namespace Work.Yeonwoo._01_Scripts.PC
         [SerializeField] private float currentSpeed = 5f;
         private Rigidbody2D _rb;
         private Vector2 _moveDir;
-
+        
         private void Awake()
         {
             _rb = GetComponent<Rigidbody2D>();
         }
-
+        
         private void OnMove(InputValue value)
         {
             _moveDir = value.Get<Vector2>();
@@ -23,7 +23,18 @@ namespace Work.Yeonwoo._01_Scripts.PC
         
         private void FixedUpdate()
         {
-            _rb.linearVelocity =_moveDir * currentSpeed;
+            bool isMoving = _moveDir.sqrMagnitude > 0.01f;
+
+            float targetSpeed = isMoving ? Movement.MaxSpeed : 0f;
+            float accel = isMoving ? Movement.acceleration : Movement.deceleration;
+
+            currentSpeed = Mathf.MoveTowards(
+                currentSpeed,
+                targetSpeed,
+                accel * Time.fixedDeltaTime
+            );
+
+            _rb.linearVelocity = _moveDir.normalized * currentSpeed;
         }
     }
 }

@@ -9,9 +9,6 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 129a05e0f09757a4f972962e2634a4bb, type: 3}
-  m_Name: Player
-  m_EditorClassIdentifier: Assembly-CSharp::Work.Yeonwoo._01_Scripts.PC.PlayerDataSO
-  <MaxSpeed>k__BackingField: 10
-  acceleration: 15.2
-  deceleration: 8.4
+  m_Script: {fileID: 11500000, guid: 6882c76c52c7a8c4793888a5d18a19c5, type: 3}
+  m_Name: Intern
+  m_EditorClassIdentifier: Assembly-CSharp::Work.Yeonwoo._01_Scripts.NPC.SO.Enemy
