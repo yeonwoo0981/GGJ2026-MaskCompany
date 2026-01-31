@@ -75,7 +75,7 @@
 - [ ] Game over screen
 - [ ] NPC patrol behavior
 - [x] Visual feedback (range color tints based on comfort)
-- [x] NPC reaction particles (Happy, Risky, Angry states)
+- [x] NPC reaction particles (Great, Good, Neutral, Bad, VeryBad states)
 
 ### Day 3 - Extra
 
@@ -122,18 +122,34 @@
 
 ## Key Mechanics Summary
 
-### Personality-Based Mask System
+### Emotion Mask System (Inside Out Inspired)
 
-Player masks represent **personality traits**, NPCs have **personality types**:
+**Player Masks:**
+| Mask | Color | Key |
+|------|-------|-----|
+| 😄 **Joy** | Yellow | 1 |
+| 😐 **Neutral** | Blue | 2 |
+| 😠 **Anger** | Red | 3 |
+| 😨 **Fear** | Purple | 4 |
 
-| Player Mask    | Best With       | Worst With |
-| -------------- | --------------- | ---------- |
-| **Agreeable**  | Dominant, Submissive | Hostile    |
-| **Assertive**  | Hostile, Dominant    | Submissive |
-| **Analytical** | Neutral, Hostile     | Dominant   |
-| **Expressive** | Friendly             | Hostile    |
+**NPC Personalities & Compatibility:**
 
-*Full compatibility matrix in [System 12](./Systems/12_Personality_Interactions.md)*
+|  | Joy | Neutral | Anger | Fear |
+|--|:---:|:-------:|:-----:|:----:|
+| **Angry** | -- | + | o | + |
+| **Cool** | ++ | - | - | - |
+| **Weird** | + | - | o | - |
+| **Loner** | o | + | - | o |
+| **Lazy** | - | ++ | - | o |
+| **Anxious** | - | + | -- | - |
+| **Friendly** | + | - | - | - |
+| **Scary** | - | o | + | ++ |
+
+`++` Great (1.5x speed) | `+` Good (0.5x speed) | `o` Neutral (→0) | `-` Bad (0.5x speed) | `--` Very Bad (1.5x speed)
+
+*Note: Neutral mask has half influence speed. Cool nerfed from `o` to `-` for Neutral mask.*
+
+*Full details in [System 12](./Systems/12_Personality_Interactions.md)*
 
 ### Interaction Types
 - **Proximity** (MVP): Enter NPC detection zone

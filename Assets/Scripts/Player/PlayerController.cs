@@ -10,7 +10,7 @@ namespace MaskCompany
         [SerializeField] private float moveSpeed = 5f;
 
         [Header("Mask")]
-        [SerializeField] private MaskType currentMask = MaskType.Agreeable;
+        [SerializeField] private MaskType currentMask = MaskType.Joy;
 
         private Rigidbody2D rb;
         private SpriteRenderer spriteRenderer;
@@ -23,6 +23,7 @@ namespace MaskCompany
             rb = GetComponent<Rigidbody2D>();
             rb.gravityScale = 0f;
             rb.freezeRotation = true;
+            rb.interpolation = RigidbodyInterpolation2D.Interpolate; // Smooth out physics for camera
             
             spriteRenderer = GetComponent<SpriteRenderer>();
         }
@@ -57,10 +58,10 @@ namespace MaskCompany
             var kb = Keyboard.current;
             if (kb == null) return;
 
-            if (kb.digit1Key.wasPressedThisFrame) SetMask(MaskType.Agreeable);
-            if (kb.digit2Key.wasPressedThisFrame) SetMask(MaskType.Assertive);
-            if (kb.digit3Key.wasPressedThisFrame) SetMask(MaskType.Analytical);
-            if (kb.digit4Key.wasPressedThisFrame) SetMask(MaskType.Expressive);
+            if (kb.digit1Key.wasPressedThisFrame) SetMask(MaskType.Joy);
+            if (kb.digit2Key.wasPressedThisFrame) SetMask(MaskType.Neutral);
+            if (kb.digit3Key.wasPressedThisFrame) SetMask(MaskType.Anger);
+            if (kb.digit4Key.wasPressedThisFrame) SetMask(MaskType.Fear);
         }
 
         private void FixedUpdate()
@@ -83,14 +84,7 @@ namespace MaskCompany
 
         public static Color GetMaskColor(MaskType mask)
         {
-            return mask switch
-            {
-                MaskType.Agreeable => new Color(0.4f, 0.8f, 0.4f),   // Green
-                MaskType.Assertive => new Color(0.9f, 0.4f, 0.3f),   // Red-orange
-                MaskType.Analytical => new Color(0.3f, 0.5f, 0.9f),  // Blue
-                MaskType.Expressive => new Color(0.9f, 0.8f, 0.2f),  // Yellow
-                _ => Color.white
-            };
+            return PersonalitySystem.GetMaskColor(mask);
         }
     }
 }

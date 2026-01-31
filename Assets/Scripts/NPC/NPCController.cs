@@ -23,8 +23,8 @@ namespace MaskCompany
         [SerializeField] private bool useParticles = true;
 
         [Header("Comfort System")]
-        [SerializeField] private float comfortChangeSpeed = 0.3f;
-        [SerializeField] private float comfortDecaySpeed = 0.2f; // How fast comfort returns to neutral when player leaves
+        [SerializeField] private float comfortChangeSpeed = 1f;    // Multiplier for player influence
+        [SerializeField] private float comfortDecaySpeed = 0.05f;  // How fast comfort returns to neutral (slow)
 
         [Header("Emotion State")]
         [SerializeField, Range(-1f, 1f)] private float comfortLevel; // -1 (upset) to +1 (happy)
@@ -46,9 +46,71 @@ namespace MaskCompany
         private Vector3 originalScale;
         private CompatibilityResult lastParticleResult;
 
-        public PersonalityType Personality => currentConfig != null ? currentConfig.personality : PersonalityType.Neutral;
+        public PersonalityType Personality => currentConfig != null ? currentConfig.personality : PersonalityType.Loner;
         public float DetectionRange => currentConfig != null ? currentConfig.detectionRange : 3f;
         public float ComfortLevel => comfortLevel;
+        public NPCConfig CurrentConfig => currentConfig;
+
+        /// <summary>
+        /// Right-click menu: Apply current config visuals (sprite, color)
+        /// </summary>
+        [ContextMenu("Apply Current Config")]
+        private void ApplyCurrentConfig()
+        {
+            if (currentConfig == null)
+            {
+                Debug.LogWarning("No current config to apply!");
+                return;
+            }
+
+            if (spriteRenderer == null)
+                spriteRenderer = GetComponent<SpriteRenderer>();
+
+            ApplyConfig();
+            
+            #if UNITY_EDITOR
+            UnityEditor.EditorUtility.SetDirty(this);
+            UnityEditor.EditorUtility.SetDirty(spriteRenderer);
+            #endif
+            
+            Debug.Log($"Applied visuals from: {currentConfig.name} ({currentConfig.personality})");
+        }
+
+        /// <summary>
+        /// Right-click menu: Assign random config from collection
+        /// </summary>
+        [ContextMenu("Assign Random Config")]
+        private void AssignRandomConfig()
+        {
+            if (npcCollection == null)
+            {
+                Debug.LogWarning("No NPC Collection assigned!");
+                return;
+            }
+
+            currentConfig = npcCollection.GetRandom();
+            
+            #if UNITY_EDITOR
+            UnityEditor.EditorUtility.SetDirty(this);
+            #endif
+            
+            Debug.Log($"Assigned config: {currentConfig.name} ({currentConfig.personality}) - use 'Apply Current Config' to see visuals");
+        }
+
+        /// <summary>
+        /// Right-click menu: Clear config (will randomize at runtime)
+        /// </summary>
+        [ContextMenu("Clear Config (Randomize at Runtime)")]
+        private void ClearConfig()
+        {
+            currentConfig = null;
+            
+            #if UNITY_EDITOR
+            UnityEditor.EditorUtility.SetDirty(this);
+            #endif
+            
+            Debug.Log("Config cleared - will randomize at runtime");
+        }
 
         private void Awake()
         {
@@ -119,14 +181,15 @@ namespace MaskCompany
         {
             if (playerInRange != null)
             {
-                // Move toward target based on current mask
-                float influenceRate = PersonalitySystem.GetInfluenceRate(playerInRange.CurrentMask, Personality);
-                targetComfort = PersonalitySystem.GetTargetComfort(
-                    PersonalitySystem.GetCompatibility(playerInRange.CurrentMask, Personality)
-                );
+                var mask = playerInRange.CurrentMask;
+                var compatibility = PersonalitySystem.GetCompatibility(mask, Personality);
                 
-                // Gradual change toward target (scaled by comfortChangeSpeed)
-                comfortLevel = Mathf.MoveTowards(comfortLevel, targetComfort, Mathf.Abs(influenceRate) * comfortChangeSpeed * Time.deltaTime);
+                // Get target and speed based on compatibility result
+                targetComfort = PersonalitySystem.GetTargetComfort(compatibility);
+                float influenceSpeed = PersonalitySystem.GetInfluenceSpeed(mask, compatibility);
+                
+                // Gradual change toward target (speed varies: 1.5x for harsh, 0.5x for normal, halved for Neutral mask)
+                comfortLevel = Mathf.MoveTowards(comfortLevel, targetComfort, influenceSpeed * comfortChangeSpeed * Time.deltaTime);
             }
             else
             {
@@ -321,8 +384,8 @@ namespace MaskCompany
             var noise = emotionParticles.noise;
             var renderer = emotionParticles.GetComponent<ParticleSystemRenderer>();
 
-            // Only emit when player in range and comfort is not neutral
-            if (playerInRange == null || Mathf.Abs(comfortLevel) < 0.1f)
+            // Only emit when player in range - low threshold so particles appear early as warning
+            if (playerInRange == null || Mathf.Abs(comfortLevel) < 0.02f)
             {
                 emission.rateOverTime = 0;
                 currentParticleRate = 0;

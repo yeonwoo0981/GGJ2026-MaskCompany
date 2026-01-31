@@ -2,113 +2,168 @@ using UnityEngine;
 
 namespace MaskCompany
 {
-    public enum PersonalityType
-    {
-        Neutral,
-        Dominant,
-        Submissive,
-        Friendly,
-        Hostile
-    }
-
+    // Masks inspired by Inside Out
     public enum MaskType
     {
-        Agreeable,
-        Assertive,
-        Analytical,
-        Expressive
+        Joy,
+        Neutral,
+        Anger,
+        Fear
+    }
+
+    // NPC Personality types
+    public enum PersonalityType
+    {
+        Angry,
+        Cool,
+        Weird,
+        Loner,
+        Lazy,
+        Anxious,
+        Friendly,
+        Scary
     }
 
     public enum CompatibilityResult
     {
-        Great,      // Pass freely
-        Good,       // Pass with acknowledgment
-        Risky,      // Warning state
-        Bad         // Detection/alert
+        Great,      // ++ (strong positive, 1.5x speed)
+        Good,       // +  (positive, 0.5x speed)
+        Neutral,    // o  (pushes toward 0)
+        Bad,        // -  (negative, 0.5x speed)
+        VeryBad     // -- (strong negative, 1.5x speed)
     }
 
     public static class PersonalitySystem
     {
+        /*
+         * Compatibility Matrix (Joy, Neutral, Anger, Fear)
+         * 
+         * Angry:    --, +, o, +
+         * Cool:     ++, -, -, -      (nerfed: Neutral o→-)
+         * Weird:    +, -, o, -
+         * Loner:    o, +, -, o
+         * Lazy:     -, ++, -, o
+         * Anxious:  -, +, --, -
+         * Friendly: +, -, -, -
+         * Scary:    -, o, +, ++
+         */
+
         public static CompatibilityResult GetCompatibility(MaskType mask, PersonalityType npc)
         {
             return (mask, npc) switch
             {
-                // Agreeable
-                (MaskType.Agreeable, PersonalityType.Dominant) => CompatibilityResult.Great,
-                (MaskType.Agreeable, PersonalityType.Submissive) => CompatibilityResult.Great,
-                (MaskType.Agreeable, PersonalityType.Friendly) => CompatibilityResult.Good,
-                (MaskType.Agreeable, PersonalityType.Hostile) => CompatibilityResult.Bad,
-                (MaskType.Agreeable, PersonalityType.Neutral) => CompatibilityResult.Good,
+                // Joy mask
+                (MaskType.Joy, PersonalityType.Angry) => CompatibilityResult.VeryBad,  // --
+                (MaskType.Joy, PersonalityType.Cool) => CompatibilityResult.Great,     // ++
+                (MaskType.Joy, PersonalityType.Weird) => CompatibilityResult.Good,     // +
+                (MaskType.Joy, PersonalityType.Loner) => CompatibilityResult.Neutral,  // o
+                (MaskType.Joy, PersonalityType.Lazy) => CompatibilityResult.Bad,       // -
+                (MaskType.Joy, PersonalityType.Anxious) => CompatibilityResult.Bad,    // -
+                (MaskType.Joy, PersonalityType.Friendly) => CompatibilityResult.Good,  // +
+                (MaskType.Joy, PersonalityType.Scary) => CompatibilityResult.Bad,      // -
 
-                // Assertive
-                (MaskType.Assertive, PersonalityType.Dominant) => CompatibilityResult.Good,
-                (MaskType.Assertive, PersonalityType.Submissive) => CompatibilityResult.Bad,
-                (MaskType.Assertive, PersonalityType.Friendly) => CompatibilityResult.Good,
-                (MaskType.Assertive, PersonalityType.Hostile) => CompatibilityResult.Great,
-                (MaskType.Assertive, PersonalityType.Neutral) => CompatibilityResult.Good,
+                // Neutral mask (half influence speed applied in GetInfluenceSpeed)
+                (MaskType.Neutral, PersonalityType.Angry) => CompatibilityResult.Good,     // +
+                (MaskType.Neutral, PersonalityType.Cool) => CompatibilityResult.Bad,       // - (nerfed from o)
+                (MaskType.Neutral, PersonalityType.Weird) => CompatibilityResult.Bad,      // -
+                (MaskType.Neutral, PersonalityType.Loner) => CompatibilityResult.Good,     // +
+                (MaskType.Neutral, PersonalityType.Lazy) => CompatibilityResult.Great,     // ++
+                (MaskType.Neutral, PersonalityType.Anxious) => CompatibilityResult.Good,   // +
+                (MaskType.Neutral, PersonalityType.Friendly) => CompatibilityResult.Bad,   // -
+                (MaskType.Neutral, PersonalityType.Scary) => CompatibilityResult.Neutral,  // o
 
-                // Analytical
-                (MaskType.Analytical, PersonalityType.Dominant) => CompatibilityResult.Bad,
-                (MaskType.Analytical, PersonalityType.Submissive) => CompatibilityResult.Good,
-                (MaskType.Analytical, PersonalityType.Friendly) => CompatibilityResult.Risky,
-                (MaskType.Analytical, PersonalityType.Hostile) => CompatibilityResult.Good,
-                (MaskType.Analytical, PersonalityType.Neutral) => CompatibilityResult.Great,
+                // Anger mask
+                (MaskType.Anger, PersonalityType.Angry) => CompatibilityResult.Neutral,    // o
+                (MaskType.Anger, PersonalityType.Cool) => CompatibilityResult.Bad,         // -
+                (MaskType.Anger, PersonalityType.Weird) => CompatibilityResult.Neutral,    // o
+                (MaskType.Anger, PersonalityType.Loner) => CompatibilityResult.Bad,        // -
+                (MaskType.Anger, PersonalityType.Lazy) => CompatibilityResult.Bad,         // -
+                (MaskType.Anger, PersonalityType.Anxious) => CompatibilityResult.VeryBad,  // --
+                (MaskType.Anger, PersonalityType.Friendly) => CompatibilityResult.Bad,     // -
+                (MaskType.Anger, PersonalityType.Scary) => CompatibilityResult.Good,       // +
 
-                // Expressive
-                (MaskType.Expressive, PersonalityType.Dominant) => CompatibilityResult.Risky,
-                (MaskType.Expressive, PersonalityType.Submissive) => CompatibilityResult.Risky,
-                (MaskType.Expressive, PersonalityType.Friendly) => CompatibilityResult.Great,
-                (MaskType.Expressive, PersonalityType.Hostile) => CompatibilityResult.Bad,
-                (MaskType.Expressive, PersonalityType.Neutral) => CompatibilityResult.Good,
+                // Fear mask
+                (MaskType.Fear, PersonalityType.Angry) => CompatibilityResult.Good,        // +
+                (MaskType.Fear, PersonalityType.Cool) => CompatibilityResult.Bad,          // -
+                (MaskType.Fear, PersonalityType.Weird) => CompatibilityResult.Bad,         // -
+                (MaskType.Fear, PersonalityType.Loner) => CompatibilityResult.Neutral,     // o
+                (MaskType.Fear, PersonalityType.Lazy) => CompatibilityResult.Neutral,      // o
+                (MaskType.Fear, PersonalityType.Anxious) => CompatibilityResult.Bad,       // -
+                (MaskType.Fear, PersonalityType.Friendly) => CompatibilityResult.Bad,      // -
+                (MaskType.Fear, PersonalityType.Scary) => CompatibilityResult.Great,       // ++
 
-                _ => CompatibilityResult.Good
+                _ => CompatibilityResult.Neutral
             };
         }
 
         /// <summary>
-        /// Returns the influence rate: how fast comfort changes per second
-        /// Positive = getting happier, Negative = getting upset
+        /// Get base influence rate (direction and magnitude).
+        /// Positive = toward +1, Negative = toward -1, 0 = toward neutral
         /// </summary>
         public static float GetInfluenceRate(MaskType mask, PersonalityType npc)
         {
             var result = GetCompatibility(mask, npc);
             return result switch
             {
-                CompatibilityResult.Great => 0.5f,   // Quickly becomes happy
-                CompatibilityResult.Good => 0.15f,   // Slowly improves
-                CompatibilityResult.Risky => -0.2f,  // Slowly gets uncomfortable
-                CompatibilityResult.Bad => -0.6f,    // Quickly gets upset
+                CompatibilityResult.Great => 0.5f,      // toward +1
+                CompatibilityResult.Good => 0.3f,       // toward +1
+                CompatibilityResult.Neutral => 0f,      // toward 0 (handled separately)
+                CompatibilityResult.Bad => -0.3f,       // toward -1
+                CompatibilityResult.VeryBad => -0.5f,   // toward -1
                 _ => 0f
             };
         }
 
         /// <summary>
-        /// Returns target comfort level for this compatibility
+        /// Get influence speed multiplier based on result strength and mask type.
+        /// Harsh (++/--) = 1.5x, Normal (+/-/o) = 1x, Neutral mask = 0.5x multiplier
         /// </summary>
+        public static float GetInfluenceSpeed(MaskType mask, CompatibilityResult result)
+        {
+            float baseSpeed = result switch
+            {
+                CompatibilityResult.Great => 1.5f,    // harsh positive
+                CompatibilityResult.Good => 1f,       // normal positive
+                CompatibilityResult.Neutral => 1f,    // neutral push (same speed, different target)
+                CompatibilityResult.Bad => 1f,        // normal negative
+                CompatibilityResult.VeryBad => 1.5f,  // harsh negative
+                _ => 1f
+            };
+
+            // Neutral mask has half influence speed
+            if (mask == MaskType.Neutral)
+            {
+                baseSpeed *= 0.5f;
+            }
+
+            return baseSpeed;
+        }
+
         public static float GetTargetComfort(CompatibilityResult result)
         {
+            // All positive results aim for +1, all negative aim for -1
+            // Speed determines how fast they get there, not the target
             return result switch
             {
-                CompatibilityResult.Great => 1f,
-                CompatibilityResult.Good => 0.3f,
-                CompatibilityResult.Risky => -0.4f,
-                CompatibilityResult.Bad => -1f,
+                CompatibilityResult.Great => 1f,      // fast to +1
+                CompatibilityResult.Good => 1f,       // slow to +1
+                CompatibilityResult.Neutral => 0f,    // pushes toward 0
+                CompatibilityResult.Bad => -1f,       // slow to -1
+                CompatibilityResult.VeryBad => -1f,   // fast to -1
                 _ => 0f
             };
         }
 
-        /// <summary>
-        /// Convert comfort level to compatibility result for display
-        /// </summary>
         public static CompatibilityResult ComfortToResult(float comfort)
         {
-            if (comfort >= 0.6f) return CompatibilityResult.Great;
-            if (comfort >= 0f) return CompatibilityResult.Good;
-            if (comfort >= -0.5f) return CompatibilityResult.Risky;
-            return CompatibilityResult.Bad;
+            if (comfort >= 0.8f) return CompatibilityResult.Great;
+            if (comfort >= 0.3f) return CompatibilityResult.Good;
+            if (comfort >= -0.3f) return CompatibilityResult.Neutral;
+            if (comfort >= -0.8f) return CompatibilityResult.Bad;
+            return CompatibilityResult.VeryBad;
         }
 
-        // For range indicators (with alpha)
+        // Personality colors (for NPC sprites/range indicators)
         public static Color GetPersonalityColor(PersonalityType type)
         {
             Color c = GetPersonalitySolidColor(type);
@@ -116,16 +171,31 @@ namespace MaskCompany
             return c;
         }
 
-        // For sprites (full opacity)
         public static Color GetPersonalitySolidColor(PersonalityType type)
         {
             return type switch
             {
-                PersonalityType.Dominant => new Color(0.8f, 0.3f, 0.3f),    // Red
-                PersonalityType.Submissive => new Color(0.4f, 0.7f, 0.9f), // Light blue
-                PersonalityType.Friendly => new Color(0.4f, 0.85f, 0.5f),  // Green
-                PersonalityType.Hostile => new Color(0.7f, 0.2f, 0.7f),    // Purple
-                PersonalityType.Neutral => new Color(0.6f, 0.6f, 0.6f),    // Gray
+                PersonalityType.Angry => new Color(0.9f, 0.3f, 0.2f),      // Red-orange
+                PersonalityType.Cool => new Color(0.2f, 0.8f, 0.85f),     // Cyan/Teal
+                PersonalityType.Weird => new Color(0.9f, 0.4f, 0.7f),     // Pink/Magenta
+                PersonalityType.Loner => new Color(0.3f, 0.3f, 0.6f),     // Dark indigo
+                PersonalityType.Lazy => new Color(0.5f, 0.7f, 0.4f),      // Muted green
+                PersonalityType.Anxious => new Color(0.7f, 0.5f, 0.9f),   // Light purple
+                PersonalityType.Friendly => new Color(0.4f, 0.9f, 0.5f),  // Bright green
+                PersonalityType.Scary => new Color(0.4f, 0.2f, 0.5f),     // Dark purple
+                _ => Color.gray
+            };
+        }
+
+        // Mask colors (Inside Out inspired)
+        public static Color GetMaskColor(MaskType mask)
+        {
+            return mask switch
+            {
+                MaskType.Joy => new Color(1f, 0.9f, 0.2f),      // Yellow (Joy)
+                MaskType.Neutral => new Color(0.3f, 0.5f, 0.9f), // Blue (Sadness-ish, calm)
+                MaskType.Anger => new Color(0.9f, 0.2f, 0.1f),   // Red (Anger)
+                MaskType.Fear => new Color(0.7f, 0.3f, 0.9f),    // Purple (Fear)
                 _ => Color.white
             };
         }

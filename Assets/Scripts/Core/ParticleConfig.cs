@@ -7,7 +7,7 @@ namespace MaskCompany
     [CreateAssetMenu(fileName = "ParticleConfig", menuName = "MaskCompany/Particle Config")]
     public class ParticleConfig : ScriptableObject
     {
-        [Header("Great - Happy/Success")]
+        [Header("Great (++) - Very Happy")]
         public ParticleSettings great = new ParticleSettings
         {
             emissionRate = 0.5f,
@@ -18,7 +18,7 @@ namespace MaskCompany
             verticalMovement = 0.8f
         };
 
-        [Header("Good - Neutral/Okay")]
+        [Header("Good (+) - Happy")]
         public ParticleSettings good = new ParticleSettings
         {
             emissionRate = 0.3f,
@@ -29,19 +29,30 @@ namespace MaskCompany
             verticalMovement = 0.3f
         };
 
-        [Header("Risky - Nervous/Uncertain")]
-        public ParticleSettings risky = new ParticleSettings
+        [Header("Neutral (o) - Calm/Returning to baseline")]
+        public ParticleSettings neutral = new ParticleSettings
+        {
+            emissionRate = 0.2f,
+            speed = 0.15f,
+            lifetime = 1.8f,
+            size = 0.45f,
+            trembleStrength = 0.05f,
+            verticalMovement = 0.15f
+        };
+
+        [Header("Bad (-) - Upset")]
+        public ParticleSettings bad = new ParticleSettings
         {
             emissionRate = 0.8f,
-            speed = 0.2f,
+            speed = 0.3f,
             lifetime = 1.5f,
             size = 0.55f,
             trembleStrength = 0.3f,
-            verticalMovement = 0.1f
+            verticalMovement = 0.2f
         };
 
-        [Header("Bad - Angry/Alert")]
-        public ParticleSettings bad = new ParticleSettings
+        [Header("VeryBad (--) - Angry/Alert")]
+        public ParticleSettings veryBad = new ParticleSettings
         {
             emissionRate = 1.2f,
             speed = 0.5f,
@@ -58,65 +69,74 @@ namespace MaskCompany
             {
                 CompatibilityResult.Great => great,
                 CompatibilityResult.Good => good,
-                CompatibilityResult.Risky => risky,
+                CompatibilityResult.Neutral => neutral,
                 CompatibilityResult.Bad => bad,
-                _ => good
+                CompatibilityResult.VeryBad => veryBad,
+                _ => neutral
             };
         }
 
         /// <summary>
-        /// Lerp between two particle settings based on comfort level
+        /// Lerp between particle settings based on comfort level.
+        /// Positive: neutral → good → great
+        /// Negative: neutral → bad → veryBad
         /// </summary>
         public ParticleSettings GetLerpedSettings(float comfortLevel)
         {
-            // comfortLevel: -1 (bad) to +1 (great)
             ParticleSettings result = new ParticleSettings();
             
             if (comfortLevel >= 0)
             {
-                // Lerp between good and great
+                // Positive: neutral (0) → good (0.5) → great (1)
                 float t = comfortLevel;
-                result.emissionRate = Mathf.Lerp(good.emissionRate, great.emissionRate, t);
-                result.speed = Mathf.Lerp(good.speed, great.speed, t);
-                result.lifetime = Mathf.Lerp(good.lifetime, great.lifetime, t);
-                result.size = Mathf.Lerp(good.size, great.size, t);
-                result.trembleStrength = Mathf.Lerp(good.trembleStrength, great.trembleStrength, t);
-                result.verticalMovement = Mathf.Lerp(good.verticalMovement, great.verticalMovement, t);
-                result.sprites = t > 0.5f ? great.sprites : good.sprites;
-            }
-            else
-            {
-                // Lerp between good and bad (through risky)
-                float t = -comfortLevel; // 0 to 1
                 if (t < 0.5f)
                 {
-                    // good to risky
-                    float t2 = t * 2f;
-                    result.emissionRate = Mathf.Lerp(good.emissionRate, risky.emissionRate, t2);
-                    result.speed = Mathf.Lerp(good.speed, risky.speed, t2);
-                    result.lifetime = Mathf.Lerp(good.lifetime, risky.lifetime, t2);
-                    result.size = Mathf.Lerp(good.size, risky.size, t2);
-                    result.trembleStrength = Mathf.Lerp(good.trembleStrength, risky.trembleStrength, t2);
-                    result.verticalMovement = Mathf.Lerp(good.verticalMovement, risky.verticalMovement, t2);
-                    result.sprites = t2 > 0.5f ? risky.sprites : good.sprites;
+                    float t2 = t * 2f; // 0 to 1
+                    result = LerpSettings(neutral, good, t2);
+                    result.sprites = t2 > 0.5f ? good.sprites : neutral.sprites;
                 }
                 else
                 {
-                    // risky to bad
-                    float t2 = (t - 0.5f) * 2f;
-                    result.emissionRate = Mathf.Lerp(risky.emissionRate, bad.emissionRate, t2);
-                    result.speed = Mathf.Lerp(risky.speed, bad.speed, t2);
-                    result.lifetime = Mathf.Lerp(risky.lifetime, bad.lifetime, t2);
-                    result.size = Mathf.Lerp(risky.size, bad.size, t2);
-                    result.trembleStrength = Mathf.Lerp(risky.trembleStrength, bad.trembleStrength, t2);
-                    result.verticalMovement = Mathf.Lerp(risky.verticalMovement, bad.verticalMovement, t2);
-                    result.oscillateVertical = t2 > 0.5f;
-                    result.sprites = t2 > 0.5f ? bad.sprites : risky.sprites;
+                    float t2 = (t - 0.5f) * 2f; // 0 to 1
+                    result = LerpSettings(good, great, t2);
+                    result.sprites = t2 > 0.5f ? great.sprites : good.sprites;
+                }
+            }
+            else
+            {
+                // Negative: neutral (0) → bad (-0.5) → veryBad (-1)
+                float t = -comfortLevel; // 0 to 1
+                if (t < 0.5f)
+                {
+                    float t2 = t * 2f; // 0 to 1
+                    result = LerpSettings(neutral, bad, t2);
+                    result.sprites = t2 > 0.5f ? bad.sprites : neutral.sprites;
+                }
+                else
+                {
+                    float t2 = (t - 0.5f) * 2f; // 0 to 1
+                    result = LerpSettings(bad, veryBad, t2);
+                    result.oscillateVertical = t2 > 0.3f;
+                    result.sprites = t2 > 0.5f ? veryBad.sprites : bad.sprites;
                 }
             }
             
             result.tint = Color.white;
             return result;
+        }
+
+        private ParticleSettings LerpSettings(ParticleSettings a, ParticleSettings b, float t)
+        {
+            return new ParticleSettings
+            {
+                emissionRate = Mathf.Lerp(a.emissionRate, b.emissionRate, t),
+                speed = Mathf.Lerp(a.speed, b.speed, t),
+                lifetime = Mathf.Lerp(a.lifetime, b.lifetime, t),
+                size = Mathf.Lerp(a.size, b.size, t),
+                trembleStrength = Mathf.Lerp(a.trembleStrength, b.trembleStrength, t),
+                verticalMovement = Mathf.Lerp(a.verticalMovement, b.verticalMovement, t),
+                oscillateVertical = a.oscillateVertical || b.oscillateVertical
+            };
         }
     }
 
