@@ -602,7 +602,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f23348dc92524ed68af78c46154ac91a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Work.Yeonwoo._01_Scripts.PC.PlayerMove
-  speed: 5
+  <Movement>k__BackingField: {fileID: 0}
+  currentSpeed: 5
 --- !u!114 &1697269255
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -664,6 +665,7 @@ MonoBehaviour:
   <Blue>k__BackingField: 0
   <Yellow>k__BackingField: 0
   <Green>k__BackingField: 0
+  <Score>k__BackingField: 0
 --- !u!1 &1698300060
 GameObject:
   m_ObjectHideFlags: 0
@@ -827,8 +829,8 @@ GameObject:
   m_Component:
   - component: {fileID: 1910407340}
   - component: {fileID: 1910407339}
-  - component: {fileID: 1910407341}
   - component: {fileID: 1910407342}
+  - component: {fileID: 1910407343}
   m_Layer: 0
   m_Name: NPC
   m_TagString: Untagged
@@ -910,18 +912,6 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1910407341
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1910407338}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: da327390f5874c68829cc2565bf9e53c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::Work.Yeonwoo._01_Scripts.NPC.NPC
 --- !u!70 &1910407342
 CapsuleCollider2D:
   m_ObjectHideFlags: 0
@@ -959,6 +949,18 @@ CapsuleCollider2D:
   m_Offset: {x: 0, y: 0}
   m_Size: {x: 1, y: 1}
   m_Direction: 0
+--- !u!114 &1910407343
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1910407338}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: baf220c4f17a4b59a50ee4b2970aca1f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Work.Yeonwoo._01_Scripts.NPC.DogNpc
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0

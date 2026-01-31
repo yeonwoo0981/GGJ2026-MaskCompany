@@ -6,7 +6,8 @@ namespace Work.Yeonwoo._01_Scripts.PC
 {
     public class PlayerMove : MonoBehaviour
     {
-        [SerializeField] private float speed = 5f;
+        [field:SerializeField] public PlayerDataSO Movement { get; private set; }
+        [SerializeField] private float currentSpeed = 5f;
         private Rigidbody2D _rb;
         private Vector2 _moveDir;
 
@@ -22,7 +23,7 @@ namespace Work.Yeonwoo._01_Scripts.PC
         
         private void FixedUpdate()
         {
-            _rb.linearVelocity =_moveDir * speed;
+            _rb.linearVelocity =_moveDir * currentSpeed;
         }
     }
 }

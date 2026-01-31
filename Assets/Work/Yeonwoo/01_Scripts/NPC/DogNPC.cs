@@ -2,7 +2,7 @@
 
 namespace Work.Yeonwoo._01_Scripts.NPC
 {
-    public abstract class NPC : MonoBehaviour
+    public class DogNpc : NPC
     {
         
     }
