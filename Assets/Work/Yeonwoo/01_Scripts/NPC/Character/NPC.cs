@@ -1,16 +1,13 @@
 ﻿using Unity.Behavior;
-using UnityEditor;
 using UnityEngine;
 using UnityEngine.Events;
 using Work.Yeonwoo._01_Scripts.NPC.PathFinder;
-using Work.Yeonwoo._01_Scripts.NPC.SO;
 using Work.Yeonwoo._01_Scripts.PC;
 
 namespace Work.Yeonwoo._01_Scripts.NPC.Character
 {
     public abstract class NPC : Agent
     {
-        public BehaviorGraphAgent BtAgent { get; private set; }
         private float _alertThreshold;
         
         private Player _player;
@@ -19,7 +16,7 @@ namespace Work.Yeonwoo._01_Scripts.NPC.Character
         protected override void InitializeComponents()
         {
             base.InitializeComponents();
-            BtAgent = GetComponent<BehaviorGraphAgent>();
+            GetComponent<BehaviorGraphAgent>();
         }
 
         protected override void Awake()
@@ -59,28 +56,9 @@ namespace Work.Yeonwoo._01_Scripts.NPC.Character
                     playerInSensingRange?.Invoke();
                     Debug.Log("감지 범위 안에 들어옴");
                 }
-                else
-                {
-                    
-                }
-            }
-            else
-            {
-                
             }
         }
         
-        private void OnDrawGizmos()
-        {
-            Handles.color = Color.red;
-            Vector2 startDirection = Quaternion.Euler(0, 0, TypeSo.SensingRotation / 2) * transform.up;
-            
-            Handles.DrawSolidArc(transform.position, Vector3.back, startDirection, TypeSo.SensingRotation, TypeSo.SensingRange);
-        }
-
-        private void OnDrawGameScene() // 게임 씬에서 표시
-        {
-            
-        }
+        
     }
 }
