@@ -12,12 +12,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6882c76c52c7a8c4793888a5d18a19c5, type: 3}
   m_Name: Intern
   m_EditorClassIdentifier: Assembly-CSharp::Work.Yeonwoo._01_Scripts.NPC.SO.Enemy
+  descriptionName: "\uC778\uD134"
   <MaskType>k__BackingField: 0
   <FeelType>k__BackingField: 0
   <AwarenessScore>k__BackingField: 1
-  <MyManScore>k__BackingField: 0
-  <Speed>k__BackingField: 0
+  <MyManScore>k__BackingField: 1
   <RotationSpeed>k__BackingField: 0
   <SensingType>k__BackingField: 0
-  <SensingRange>k__BackingField: 0
+  <SensingRotation>k__BackingField: 30
+  <SensingRange>k__BackingField: 5
   <Angle>k__BackingField: 0
