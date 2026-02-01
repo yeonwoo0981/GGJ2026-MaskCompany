@@ -215,6 +215,12 @@ namespace MaskCompany
 
         private void ShowLevelComplete()
         {
+            // In tutorial mode, TutorialManager handles transitions - skip this
+            if (TutorialManager.TutoMode)
+            {
+                return;
+            }
+            
             // Stop all NPC movement
             StopAllNPCMovement();
             

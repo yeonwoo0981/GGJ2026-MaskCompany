@@ -130,7 +130,7 @@ PrefabInstance:
     - target: {fileID: 618034414912768921, guid: 5edbb58e0d2104b4395b0d8b791f9ae2, type: 3}
       propertyPath: m_Sprite
       value: 
-      objectReference: {fileID: 7729768860333772239, guid: b66832cb2931f0e4bb94976d866e54ff, type: 3}
+      objectReference: {fileID: 21300000, guid: d1df763abe81b8c40bf1480bd8973e88, type: 3}
     - target: {fileID: 618034414912768921, guid: 5edbb58e0d2104b4395b0d8b791f9ae2, type: 3}
       propertyPath: m_Color.b
       value: 0.5
@@ -185,16 +185,24 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8313044180172299376, guid: 5edbb58e0d2104b4395b0d8b791f9ae2, type: 3}
       propertyPath: m_Name
-      value: NPC_Fish_Scary
+      value: NPC_hamsert_Weird
       objectReference: {fileID: 0}
     - target: {fileID: 8313044180172299376, guid: 5edbb58e0d2104b4395b0d8b791f9ae2, type: 3}
       propertyPath: m_IsActive
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 9111522804264243446, guid: 5edbb58e0d2104b4395b0d8b791f9ae2, type: 3}
+      propertyPath: moveLength
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 9111522804264243446, guid: 5edbb58e0d2104b4395b0d8b791f9ae2, type: 3}
       propertyPath: currentConfig
       value: 
-      objectReference: {fileID: 11400000, guid: 961e4b5314645bb46aae048489437ec1, type: 2}
+      objectReference: {fileID: 11400000, guid: 7416156eae324d742a80aa9f6050eca3, type: 2}
+    - target: {fileID: 9111522804264243446, guid: 5edbb58e0d2104b4395b0d8b791f9ae2, type: 3}
+      propertyPath: moveDirection
+      value: 2
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -2392,7 +2400,7 @@ PrefabInstance:
     - target: {fileID: 618034414912768921, guid: 5edbb58e0d2104b4395b0d8b791f9ae2, type: 3}
       propertyPath: m_Sprite
       value: 
-      objectReference: {fileID: -3102994270238535240, guid: b66832cb2931f0e4bb94976d866e54ff, type: 3}
+      objectReference: {fileID: 21300000, guid: 22d71e376f13ff7449f48401fcc5e609, type: 3}
     - target: {fileID: 618034414912768921, guid: 5edbb58e0d2104b4395b0d8b791f9ae2, type: 3}
       propertyPath: m_Color.b
       value: 0.2
@@ -2407,7 +2415,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5441363021144314471, guid: 5edbb58e0d2104b4395b0d8b791f9ae2, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 5.06
+      value: 4.07
       objectReference: {fileID: 0}
     - target: {fileID: 5441363021144314471, guid: 5edbb58e0d2104b4395b0d8b791f9ae2, type: 3}
       propertyPath: m_LocalPosition.y
@@ -2447,7 +2455,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8313044180172299376, guid: 5edbb58e0d2104b4395b0d8b791f9ae2, type: 3}
       propertyPath: m_Name
-      value: NPC_Bull_Angry
+      value: NPC_Goat_Angry
       objectReference: {fileID: 0}
     - target: {fileID: 8313044180172299376, guid: 5edbb58e0d2104b4395b0d8b791f9ae2, type: 3}
       propertyPath: m_IsActive
@@ -2456,7 +2464,11 @@ PrefabInstance:
     - target: {fileID: 9111522804264243446, guid: 5edbb58e0d2104b4395b0d8b791f9ae2, type: 3}
       propertyPath: currentConfig
       value: 
-      objectReference: {fileID: 11400000, guid: 0f0f70142a9d94f4ca94ed7065000668, type: 2}
+      objectReference: {fileID: 11400000, guid: bdead02e377c5a94290dcb219f5c3aa2, type: 2}
+    - target: {fileID: 9111522804264243446, guid: 5edbb58e0d2104b4395b0d8b791f9ae2, type: 3}
+      propertyPath: moveDirection
+      value: 2
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -3769,7 +3781,7 @@ PrefabInstance:
     - target: {fileID: 618034414912768921, guid: 5edbb58e0d2104b4395b0d8b791f9ae2, type: 3}
       propertyPath: m_Sprite
       value: 
-      objectReference: {fileID: 442113960596436644, guid: b66832cb2931f0e4bb94976d866e54ff, type: 3}
+      objectReference: {fileID: 21300000, guid: 6bb97a68969279641ae71525fae65d7e, type: 3}
     - target: {fileID: 618034414912768921, guid: 5edbb58e0d2104b4395b0d8b791f9ae2, type: 3}
       propertyPath: m_Color.b
       value: 0.2
@@ -3824,16 +3836,24 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8313044180172299376, guid: 5edbb58e0d2104b4395b0d8b791f9ae2, type: 3}
       propertyPath: m_Name
-      value: NPC_Angry Cat_Angry
+      value: NPC_Guy_Angry
       objectReference: {fileID: 0}
     - target: {fileID: 8313044180172299376, guid: 5edbb58e0d2104b4395b0d8b791f9ae2, type: 3}
       propertyPath: m_IsActive
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 9111522804264243446, guid: 5edbb58e0d2104b4395b0d8b791f9ae2, type: 3}
+      propertyPath: moveLength
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 9111522804264243446, guid: 5edbb58e0d2104b4395b0d8b791f9ae2, type: 3}
       propertyPath: currentConfig
       value: 
-      objectReference: {fileID: 11400000, guid: f96e32bd4613f7d468b292bc83229096, type: 2}
+      objectReference: {fileID: 11400000, guid: e69ddb77d29c30d43aa03f2372914c1a, type: 2}
+    - target: {fileID: 9111522804264243446, guid: 5edbb58e0d2104b4395b0d8b791f9ae2, type: 3}
+      propertyPath: moveDirection
+      value: 4
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -5444,7 +5464,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 195, y: -360}
+  m_AnchoredPosition: {x: 195, y: -315}
   m_SizeDelta: {x: 20, y: 5}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!23 &1806422234
@@ -6023,7 +6043,7 @@ PrefabInstance:
     - target: {fileID: 618034414912768921, guid: 5edbb58e0d2104b4395b0d8b791f9ae2, type: 3}
       propertyPath: m_Sprite
       value: 
-      objectReference: {fileID: 1893670189769602202, guid: b66832cb2931f0e4bb94976d866e54ff, type: 3}
+      objectReference: {fileID: 21300000, guid: 7949366e244b2fc45b525119e4b0f62c, type: 3}
     - target: {fileID: 618034414912768921, guid: 5edbb58e0d2104b4395b0d8b791f9ae2, type: 3}
       propertyPath: m_Color.b
       value: 0.6
@@ -6078,7 +6098,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8313044180172299376, guid: 5edbb58e0d2104b4395b0d8b791f9ae2, type: 3}
       propertyPath: m_Name
-      value: NPC_Loner Frog_Loner
+      value: NPC_Fish_Loner
       objectReference: {fileID: 0}
     - target: {fileID: 8313044180172299376, guid: 5edbb58e0d2104b4395b0d8b791f9ae2, type: 3}
       propertyPath: m_IsActive
@@ -6087,7 +6107,7 @@ PrefabInstance:
     - target: {fileID: 9111522804264243446, guid: 5edbb58e0d2104b4395b0d8b791f9ae2, type: 3}
       propertyPath: currentConfig
       value: 
-      objectReference: {fileID: 11400000, guid: 01e8d98ae1a8ac848a2205aa30eff286, type: 2}
+      objectReference: {fileID: 11400000, guid: 442eb12ebfa87cd49880884558e8c824, type: 2}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -6655,6 +6675,10 @@ MonoBehaviour:
   messageDuration: 2
   levelCompletePanel: {fileID: 0}
   levelFailedPanel: {fileID: 0}
+  fadeImage: {fileID: 0}
+  panelDisplayTime: 3
+  fadeDuration: 1
+  nextSceneName: tuto
 --- !u!1 &2095071199
 GameObject:
   m_ObjectHideFlags: 0
@@ -6953,7 +6977,7 @@ PrefabInstance:
     - target: {fileID: 618034414912768921, guid: 5edbb58e0d2104b4395b0d8b791f9ae2, type: 3}
       propertyPath: m_Sprite
       value: 
-      objectReference: {fileID: 7755224123621818408, guid: b66832cb2931f0e4bb94976d866e54ff, type: 3}
+      objectReference: {fileID: 21300000, guid: 8e496fdac04f09e47975dfd3aa5b920e, type: 3}
     - target: {fileID: 618034414912768921, guid: 5edbb58e0d2104b4395b0d8b791f9ae2, type: 3}
       propertyPath: m_Color.b
       value: 0.5
@@ -7008,16 +7032,28 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8313044180172299376, guid: 5edbb58e0d2104b4395b0d8b791f9ae2, type: 3}
       propertyPath: m_Name
-      value: NPC_Friendly Hamster_Loner
+      value: NPC_Sheep_Friendly
       objectReference: {fileID: 0}
     - target: {fileID: 8313044180172299376, guid: 5edbb58e0d2104b4395b0d8b791f9ae2, type: 3}
       propertyPath: m_IsActive
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 9111522804264243446, guid: 5edbb58e0d2104b4395b0d8b791f9ae2, type: 3}
+      propertyPath: moveSpeed
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 9111522804264243446, guid: 5edbb58e0d2104b4395b0d8b791f9ae2, type: 3}
+      propertyPath: moveLength
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 9111522804264243446, guid: 5edbb58e0d2104b4395b0d8b791f9ae2, type: 3}
       propertyPath: currentConfig
       value: 
-      objectReference: {fileID: 11400000, guid: fe239cc462a33354c86edaf35733143a, type: 2}
+      objectReference: {fileID: 11400000, guid: 6120c7c6673910040ba7bb2e3e52ca64, type: 2}
+    - target: {fileID: 9111522804264243446, guid: 5edbb58e0d2104b4395b0d8b791f9ae2, type: 3}
+      propertyPath: moveDirection
+      value: 3
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []

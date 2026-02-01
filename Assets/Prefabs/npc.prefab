@@ -252,7 +252,7 @@ MonoBehaviour:
   currentConfig: {fileID: 0}
   rangeSprite: {fileID: 21300000, guid: bf44bd9d566bb4f45845413ec7f8ee8e, type: 3}
   showRangeGizmo: 1
-  visualRangeMultiplier: 1.6
+  visualRangeMultiplier: 1.4
   baseBreatheDuration: 1.5
   breatheScale: 0.05
   particleConfig: {fileID: 11400000, guid: c3680bbbba43d9347a5b504848339639, type: 2}
