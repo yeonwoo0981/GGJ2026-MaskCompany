@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 using TMPro;
 using DG.Tweening;
 
@@ -25,6 +26,10 @@ namespace MaskCompany
         [Header("Level End")]
         [SerializeField] private GameObject levelCompletePanel;
         [SerializeField] private GameObject levelFailedPanel;
+        [SerializeField] private Image fadeImage;
+        [SerializeField] private float panelDisplayTime = 3f;
+        [SerializeField] private float fadeDuration = 1f;
+        [SerializeField] private string nextSceneName = "tuto";
 
         private List<Image> lifeIcons = new List<Image>();
         private List<GoalUIItem> goalItems = new List<GoalUIItem>();
@@ -210,11 +215,51 @@ namespace MaskCompany
 
         private void ShowLevelComplete()
         {
+            // Stop all NPC movement
+            StopAllNPCMovement();
+            
+            // Show panel
             if (levelCompletePanel != null)
             {
                 levelCompletePanel.SetActive(true);
                 levelCompletePanel.transform.localScale = Vector3.zero;
                 levelCompletePanel.transform.DOScale(1f, 0.5f).SetEase(Ease.OutBack);
+            }
+            
+            // After panel display time, fade out and load next scene
+            DOVirtual.DelayedCall(panelDisplayTime, () =>
+            {
+                FadeOutAndLoadScene(nextSceneName);
+            });
+        }
+
+        private void StopAllNPCMovement()
+        {
+            var npcs = FindObjectsByType<NPCController>(FindObjectsSortMode.None);
+            foreach (var npc in npcs)
+            {
+                npc.StopMovement();
+            }
+        }
+
+        private void FadeOutAndLoadScene(string sceneName)
+        {
+            if (fadeImage != null)
+            {
+                fadeImage.gameObject.SetActive(true);
+                Color c = fadeImage.color;
+                c.a = 0f;
+                fadeImage.color = c;
+                
+                fadeImage.DOFade(1f, fadeDuration).OnComplete(() =>
+                {
+                    SceneManager.LoadScene(sceneName);
+                });
+            }
+            else
+            {
+                // No fade image, just load scene
+                SceneManager.LoadScene(sceneName);
             }
         }
 

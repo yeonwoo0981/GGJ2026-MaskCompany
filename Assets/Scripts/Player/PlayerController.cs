@@ -1,3 +1,4 @@
+using System.Collections;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -12,6 +13,7 @@ namespace MaskCompany
         [Header("Mask")]
         [SerializeField] private MaskType currentMask = MaskType.Joy;
         [SerializeField] private SpriteRenderer maskRenderer; // Child object that displays the mask
+        [SerializeField] private float maskChangeAnimDuration = 0.5f; // Duration of mask change animation
         
         [Header("Mask Sprites")]
         [SerializeField] private Sprite joySprite;
@@ -22,6 +24,8 @@ namespace MaskCompany
         private Rigidbody2D rb;
         private SpriteRenderer spriteRenderer;
         private Vector2 moveInput;
+        private Animator bodyAnimator;
+        private bool isChangingMask; // True while mask change animation is playing
 
         public MaskType CurrentMask => currentMask;
 
@@ -33,6 +37,9 @@ namespace MaskCompany
             rb.interpolation = RigidbodyInterpolation2D.Interpolate; // Smooth out physics for camera
             
             spriteRenderer = GetComponent<SpriteRenderer>();
+            
+            // Get animator from child (Body)
+            bodyAnimator = GetComponentInChildren<Animator>();
         }
 
         private void Start()
@@ -83,23 +90,76 @@ namespace MaskCompany
             if (TutorialManager.TutoMode && !TutorialManager.Instance.CanPlayerMove)
             {
                 rb.linearVelocity = Vector2.zero;
+                if (!isChangingMask) ResetAnimatorToFirstFrame();
+                return;
+            }
+            
+            // Block movement during mask change animation
+            if (isChangingMask)
+            {
+                rb.linearVelocity = Vector2.zero;
                 return;
             }
             
             rb.linearVelocity = moveInput * moveSpeed;
+            
+            // Enable animator only when moving
+            if (bodyAnimator != null)
+            {
+                bool isMoving = moveInput.sqrMagnitude > 0.01f;
+                if (isMoving)
+                {
+                    bodyAnimator.enabled = true;
+                }
+                else
+                {
+                    ResetAnimatorToFirstFrame();
+                }
+            }
+        }
+        
+        private void ResetAnimatorToFirstFrame()
+        {
+            if (bodyAnimator == null) return;
+            bodyAnimator.enabled = true;
+            bodyAnimator.Play(0, 0, 0f); // Play first state, layer 0, at time 0
+            bodyAnimator.Update(0f); // Force update to apply the frame
+            bodyAnimator.enabled = false;
         }
 
         public void SetMask(MaskType mask)
         {
             if (currentMask == mask) return;
-            currentMask = mask;
+            if (isChangingMask) return; // Don't change mask while animating
+            
+            StartCoroutine(ChangeMaskCoroutine(mask));
+        }
+        
+        private IEnumerator ChangeMaskCoroutine(MaskType newMask)
+        {
+            isChangingMask = true;
+            
+            // Stop movement and play mask change animation
+            if (bodyAnimator != null)
+            {
+                bodyAnimator.enabled = true;
+                bodyAnimator.SetTrigger("MaskChange");
+            }
+            
+            // Wait for animation to finish
+            yield return new WaitForSeconds(maskChangeAnimDuration);
+            
+            // Now change the mask visual
+            currentMask = newMask;
             UpdateMaskVisual();
             
             // Notify tutorial manager if in tutorial mode
             if (TutorialManager.TutoMode && TutorialManager.Instance != null)
             {
-                TutorialManager.Instance.OnMaskUsed(mask);
+                TutorialManager.Instance.OnMaskUsed(newMask);
             }
+            
+            isChangingMask = false;
         }
 
         private void UpdateMaskVisual()

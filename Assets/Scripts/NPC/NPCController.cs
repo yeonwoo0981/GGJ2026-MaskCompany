@@ -1,8 +1,18 @@
+using System.Collections;
 using UnityEngine;
 using DG.Tweening;
 
 namespace MaskCompany
 {
+    public enum NPCMoveDirection
+    {
+        None,
+        Up,
+        Down,
+        Left,
+        Right
+    }
+
     [RequireComponent(typeof(SpriteRenderer))]
     public class NPCController : MonoBehaviour
     {
@@ -32,6 +42,11 @@ namespace MaskCompany
         [SerializeField, Range(-1f, 1f)] private float comfortLevel; // -1 (upset) to +1 (happy)
         [SerializeField] private CompatibilityResult currentResult;
         
+        [Header("Simple Movement")]
+        [SerializeField] private NPCMoveDirection moveDirection = NPCMoveDirection.None;
+        [SerializeField] private float moveLength = 0f;
+        [SerializeField] private float moveSpeed = 2f;
+
         [Header("Runtime Debug")]
         [SerializeField] private float targetComfort;
         [SerializeField] private bool isPlayerInRange;
@@ -50,6 +65,13 @@ namespace MaskCompany
         private bool hasInitialBurst; // Only burst once per NPC lifetime
         private float extremeLockTimer; // Timer to prevent decay after reaching extreme
         private bool hasReachedExtreme; // Track if we've notified tutorial manager
+        
+        // Movement
+        private Animator bodyAnimator;
+        private Vector3 startPosition;
+        private bool isMoving;
+        private Coroutine movementCoroutine;
+        private bool movementStopped;
 
         public PersonalityType Personality => currentConfig != null ? currentConfig.personality : PersonalityType.Loner;
         public float DetectionRange => currentConfig != null ? currentConfig.detectionRange : 3f;
@@ -152,6 +174,10 @@ namespace MaskCompany
                 rb.freezeRotation = true;
                 rb.bodyType = RigidbodyType2D.Kinematic; // Prevent player from pushing NPCs
             }
+            
+            // Get animator from child (Body)
+            bodyAnimator = GetComponentInChildren<Animator>();
+            startPosition = transform.position;
         }
 
         private void Start()
@@ -169,6 +195,15 @@ namespace MaskCompany
             {
                 CreateParticleSystem();
             }
+            
+            // Initialize animator to first frame (idle pose)
+            ResetAnimatorToFirstFrame();
+            
+            // Start simple movement if configured
+            if (moveDirection != NPCMoveDirection.None && moveLength > 0f)
+            {
+                movementCoroutine = StartCoroutine(SimpleMovementLoop());
+            }
         }
 
         private void OnDestroy()
@@ -185,14 +220,15 @@ namespace MaskCompany
                 spriteRenderer.sprite = currentConfig.sprite;
             }
 
-            if (currentConfig.tintColor != Color.white)
-            {
-                spriteRenderer.color = currentConfig.tintColor;
-            }
-            else
-            {
-                spriteRenderer.color = PersonalitySystem.GetPersonalitySolidColor(currentConfig.personality);
-            }
+            // Commented out - might need later
+            // if (currentConfig.tintColor != Color.white)
+            // {
+            //     spriteRenderer.color = currentConfig.tintColor;
+            // }
+            // else
+            // {
+            //     spriteRenderer.color = PersonalitySystem.GetPersonalitySolidColor(currentConfig.personality);
+            // }
 
             gameObject.name = $"NPC_{currentConfig.npcName}_{currentConfig.personality}";
         }
@@ -621,17 +657,110 @@ namespace MaskCompany
 
         #endregion
 
+        #region Simple Movement
+
+        /// <summary>
+        /// Stop movement and reset to idle pose
+        /// </summary>
+        public void StopMovement()
+        {
+            movementStopped = true;
+            
+            if (movementCoroutine != null)
+            {
+                StopCoroutine(movementCoroutine);
+                movementCoroutine = null;
+            }
+            
+            isMoving = false;
+            ResetAnimatorToFirstFrame();
+        }
+
+        private IEnumerator SimpleMovementLoop()
+        {
+            while (!movementStopped)
+            {
+                // Wait random time at start position
+                float waitTime = Random.Range(1f, 5f);
+                yield return new WaitForSeconds(waitTime);
+                
+                if (movementStopped) break;
+                
+                // Move to target position
+                Vector3 targetPosition = startPosition + GetDirectionVector() * moveLength;
+                yield return StartCoroutine(MoveToPosition(targetPosition));
+                
+                if (movementStopped) break;
+                
+                // Wait random time at target position
+                waitTime = Random.Range(1f, 5f);
+                yield return new WaitForSeconds(waitTime);
+                
+                if (movementStopped) break;
+                
+                // Move back to start position
+                yield return StartCoroutine(MoveToPosition(startPosition));
+            }
+        }
+
+        private IEnumerator MoveToPosition(Vector3 target)
+        {
+            isMoving = true;
+            
+            // Enable animator while moving
+            if (bodyAnimator != null)
+            {
+                bodyAnimator.enabled = true;
+            }
+            
+            while (!movementStopped && Vector3.Distance(transform.position, target) > 0.05f)
+            {
+                transform.position = Vector3.MoveTowards(transform.position, target, moveSpeed * Time.deltaTime);
+                yield return null;
+            }
+            
+            transform.position = target;
+            isMoving = false;
+            
+            // Reset animator to first frame when stopped
+            ResetAnimatorToFirstFrame();
+        }
+
+        private Vector3 GetDirectionVector()
+        {
+            switch (moveDirection)
+            {
+                case NPCMoveDirection.Up: return Vector3.up;
+                case NPCMoveDirection.Down: return Vector3.down;
+                case NPCMoveDirection.Left: return Vector3.left;
+                case NPCMoveDirection.Right: return Vector3.right;
+                default: return Vector3.zero;
+            }
+        }
+
+        private void ResetAnimatorToFirstFrame()
+        {
+            if (bodyAnimator == null) return;
+            bodyAnimator.enabled = true;
+            bodyAnimator.Play(0, 0, 0f);
+            bodyAnimator.Update(0f);
+            bodyAnimator.enabled = false;
+        }
+
+        #endregion
+
         private void OnValidate()
         {
             UpdateRangeScale();
             
-            if (currentConfig != null && spriteRenderer != null)
-            {
-                if (currentConfig.tintColor != Color.white)
-                    spriteRenderer.color = currentConfig.tintColor;
-                else
-                    spriteRenderer.color = PersonalitySystem.GetPersonalitySolidColor(currentConfig.personality);
-            }
+            // Commented out - might need later
+            // if (currentConfig != null && spriteRenderer != null)
+            // {
+            //     if (currentConfig.tintColor != Color.white)
+            //         spriteRenderer.color = currentConfig.tintColor;
+            //     else
+            //         spriteRenderer.color = PersonalitySystem.GetPersonalitySolidColor(currentConfig.personality);
+            // }
         }
 
         private void OnDrawGizmosSelected()

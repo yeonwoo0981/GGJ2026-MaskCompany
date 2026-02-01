@@ -381,8 +381,8 @@ namespace MaskCompany
             yield return StartCoroutine(WaitForRoom2Completion());
 
             // Tutorial complete - fade out and load Game scene
-            Debug.Log("[Tutorial] Complete! Fading to Game scene...");
-            yield return StartCoroutine(FadeAndLoadScene("Game"));
+            Debug.Log("[Tutorial] Complete! Fading to GameNew scene...");
+            yield return StartCoroutine(FadeAndLoadScene("GameNew"));
         }
 
         private void SetupLevelGoalHandler()
