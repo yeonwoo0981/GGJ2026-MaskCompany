@@ -334,23 +334,19 @@ namespace MaskCompany
                 }
             }
 
-            // Count completed goals
+            // Count completed and resolved goals
             goalsCompleted = 0;
-            int requiredGoals = 0;
+            int resolvedGoals = 0; // completed OR failed
+            
             foreach (var goal in goals)
             {
                 if (goal.completed) goalsCompleted++;
-                if (!goal.optional) requiredGoals++;
+                if (goal.completed || goal.failed) resolvedGoals++;
             }
 
-            // Check win condition
-            int completedRequired = 0;
-            foreach (var goal in goals)
-            {
-                if (!goal.optional && goal.completed) completedRequired++;
-            }
-
-            if (completedRequired >= requiredGoals && requiredGoals > 0)
+            // Check win condition: all goals resolved (completed or failed)
+            // If we still have lives and all goals are done, it's a win
+            if (resolvedGoals >= goals.Count && goals.Count > 0 && goalsCompleted > 0)
             {
                 LevelComplete();
             }

@@ -236,6 +236,7 @@ GameObject:
   - component: {fileID: 228581109}
   - component: {fileID: 228581108}
   - component: {fileID: 228581107}
+  - component: {fileID: 228581110}
   m_Layer: 0
   m_Name: ManagersSOUND
   m_TagString: Untagged
@@ -285,6 +286,21 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &228581110
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 228581106}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0c0299d83e8d5a9449fb797b1f7a0788, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::MaskCompany.QuickReset
+  resetTimeout: 1
+  tutoSceneName: Tuto
+  gameSceneName: GameNew
 --- !u!1001 &260269350
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -469580,7 +469596,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 5441363021144314471, guid: 5edbb58e0d2104b4395b0d8b791f9ae2, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 14.48
+      value: 14
       objectReference: {fileID: 0}
     - target: {fileID: 5441363021144314471, guid: 5edbb58e0d2104b4395b0d8b791f9ae2, type: 3}
       propertyPath: m_LocalPosition.y
