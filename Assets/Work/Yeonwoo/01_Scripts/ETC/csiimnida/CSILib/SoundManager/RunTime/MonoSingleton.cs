@@ -1,6 +1,6 @@
-﻿using UnityEngine;
+using UnityEngine;
 
-namespace Work.Yeonwoo._01_Scripts.ETC.csiimnida.CSILib.SoundManager.RunTime
+namespace CSILib.SoundManager.RunTime
 {
     public class MonoSingleton<T> : MonoBehaviour where T : MonoBehaviour
     {

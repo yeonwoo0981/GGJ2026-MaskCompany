@@ -2,7 +2,7 @@ using System.Collections;
 using UnityEngine;
 using UnityEngine.Audio;
 
-namespace Work.Yeonwoo._01_Scripts.ETC.csiimnida.CSILib.SoundManager.RunTime
+namespace CSILib.SoundManager.RunTime
 {
     public class SoundManager : MonoSingleton<SoundManager>
     {

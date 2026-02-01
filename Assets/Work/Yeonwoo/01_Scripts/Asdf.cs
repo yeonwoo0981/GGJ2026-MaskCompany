@@ -1,7 +1,7 @@
-﻿using System;
+using System;
 using UnityEngine;
 using UnityEngine.InputSystem;
-using Work.Yeonwoo._01_Scripts.ETC.csiimnida.CSILib.SoundManager.RunTime;
+using CSILib.SoundManager.RunTime;
 
 namespace Work.Yeonwoo._01_Scripts
 {

@@ -1,5 +1,6 @@
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 using TMPro;
 using DG.Tweening;
 using System.Collections;
@@ -15,6 +16,7 @@ namespace MaskCompany
         [Header("UI References")]
         [SerializeField] private GameObject titleObject;
         [SerializeField] private GameObject inputHintObject;
+        [SerializeField] private GameObject hint2Object; // Room 2 mask hint (1-2-3-4)
         [SerializeField] private GameObject tutorialTextObject; // Also contains step children
         [SerializeField] private TextMeshProUGUI tutorialText;
         
@@ -22,6 +24,10 @@ namespace MaskCompany
         [SerializeField] private GameObject goalUI;
         [SerializeField] private GameObject livesUI;
         [SerializeField] private GameObject doorUI;
+        
+        [Header("Scene Transition")]
+        [SerializeField] private Image fadeImage; // Full screen fade image
+        [SerializeField] private float sceneFadeDuration = 1f;
 
         [Header("Room 1")]
         [SerializeField] private GameObject room1Parent; // All decor as children
@@ -37,7 +43,9 @@ namespace MaskCompany
 
         [Header("Timing")]
         [SerializeField] private float titleFadeInDuration = 1f;
+        #pragma warning disable CS0414 // Field is assigned but never used (kept for inspector tweaking)
         [SerializeField] private float titleDisplayTime = 2f;
+        #pragma warning restore CS0414
         [SerializeField] private float inputHintDelay = 1f;
         [SerializeField] private float decorFadeInterval = 0.1f;  // Delay between each object appearing
         [SerializeField] private float npcDelayAfterDecor = 1f;
@@ -58,6 +66,7 @@ namespace MaskCompany
         private float firedAnimationDuration = 2f; // How long to wait for fired animation
         private bool hasShownSecondText; // Track if we've shown the "Be careful" text
         private Tweener textWobbleTween; // Wobble animation for text
+        private HashSet<MaskType> usedMasks = new HashSet<MaskType>(); // Track masks used in room 2
 
         private void Awake()
         {
@@ -90,6 +99,11 @@ namespace MaskCompany
             {
                 HideUIAlpha(tutorialTextObject);
                 tutorialTextObject.SetActive(false);
+            }
+            if (hint2Object != null)
+            {
+                HideUIAlpha(hint2Object);
+                hint2Object.SetActive(false);
             }
             
             // Hide all tutorial step children at start (children of tutorialTextObject)
@@ -290,8 +304,8 @@ namespace MaskCompany
             // Fade in game UI (goal, lives)
             FadeInGameUI();
 
-            // Show first tutorial text
-            ShowText("Match your mask to the right person");
+            // Show first tutorial text with step child 0 (first)
+            ShowText("Match your mask to befriend coworkers!", 0);
 
             // === STEP 5: Wait for room 1 completion ===
             currentStep = 1;
@@ -310,31 +324,65 @@ namespace MaskCompany
             HideText();
             HideAllStepChildren();
 
-            // === STEP 6: Transition to Room 2 ===
-            yield return StartCoroutine(TransitionToRoom2());
+            // === STEP 6: Transition to Room 2 (decor only, no NPCs yet) ===
+            yield return StartCoroutine(TransitionToRoom2DecorOnly());
             
-            // Wait 1 second before showing room 2 text
-            yield return new WaitForSeconds(1f);
+            // Clear goals for room 2 and refresh UI
+            var handler2 = LevelGoalHandler.Instance;
+            if (handler2 != null)
+            {
+                handler2.ClearGoals();
+                handler2.GetAllNPCs().Clear();
+                handler2.ResetForNewRoom();
+            }
+            
+            // Refresh goals UI to clear the old goals display
+            RefreshGoalsUI();
             
             // Enable mask changing for room 2
             canChangeMask = true;
-
-            // Setup room 2 goal
-            SetupRoom2Goal();
-
-            // Show room 2 instructions
-            ShowText("Now you can switch masks with 1-2-3-4. Find the right combination!");
-
-            // === STEP 7: Wait for room 2 completion ===
+            usedMasks.Clear();
+            usedMasks.Add(MaskType.Joy); // Player starts with Joy mask, count it as used
+            
+            // Show hint2 (mask switching hint) AND text with step child 2 (3rd sub-image)
+            if (hint2Object != null)
+            {
+                HideUIAlpha(hint2Object);
+                hint2Object.SetActive(true);
+                FadeInUI(hint2Object, 0.5f);
+            }
+            ShowText("Switch masks with 1-2-3-4", 2);
+            
+            // === STEP 7: Wait for player to use all 4 masks ===
             currentStep = 2;
+            yield return StartCoroutine(WaitForAllMasksUsed());
+            
+            // Hide hint2 and current text
+            if (hint2Object != null)
+            {
+                FadeOutUI(hint2Object, 0.3f, () => hint2Object.SetActive(false));
+            }
+            HideText();
+            
+            yield return new WaitForSeconds(0.5f);
+            
+            // Spawn NPCs first
+            var room2NPCsList = GetRoom2NPCs();
+            yield return StartCoroutine(FadeInNPCs(room2NPCsList));
+            
+            // Setup room 2 goal and refresh UI
+            SetupRoom2Goal();
+            RefreshGoalsUI();
+            
+            // NOW show goal explanation with step child 3 (the 4th one, index 3)
+            ShowText("Get him fired!", 3);
+
+            // === STEP 8: Wait for room 2 completion ===
             yield return StartCoroutine(WaitForRoom2Completion());
 
-            // Tutorial complete!
-            ShowText("Tutorial Complete! You're ready to play!");
-            yield return new WaitForSeconds(2f);
-
-            // Could load main game here
-            Debug.Log("[Tutorial] Complete!");
+            // Tutorial complete - fade out and load Game scene
+            Debug.Log("[Tutorial] Complete! Fading to Game scene...");
+            yield return StartCoroutine(FadeAndLoadScene("Game"));
         }
 
         private void SetupLevelGoalHandler()
@@ -362,12 +410,12 @@ namespace MaskCompany
         private void OnGoalNPCBefriended(NPCController npc)
         {
             Debug.Log($"[Tutorial] NPC befriended: {npc.name}");
-            ShowNextStepChild();
             
-            // Show second text on first completion (room 1 only)
-            if (!hasShownSecondText && currentStep == 1)
+            // Only advance step children ONCE during room 1 (when showing second text)
+            if (currentStep == 1 && !hasShownSecondText)
             {
                 hasShownSecondText = true;
+                ShowNextStepChild();
                 UpdateText("Wrong mask = they get fired!");
             }
         }
@@ -376,12 +424,12 @@ namespace MaskCompany
         {
             Debug.Log($"[Tutorial] NPC fired: {npc.name}");
             isNPCBeingFired = true;
-            ShowNextStepChild();
             
-            // Show second text on first completion (room 1 only)
-            if (!hasShownSecondText && currentStep == 1)
+            // Only advance step children ONCE during room 1 (when showing second text)
+            if (currentStep == 1 && !hasShownSecondText)
             {
                 hasShownSecondText = true;
+                ShowNextStepChild();
                 UpdateText("Wrong mask = they get fired!");
             }
             
@@ -447,10 +495,6 @@ namespace MaskCompany
             var handler = LevelGoalHandler.Instance;
             if (handler == null || room2GoalTarget == null) return;
 
-            // Clear previous goals and NPCs
-            handler.ClearGoals();
-            handler.GetAllNPCs().Clear();
-
             // Add room 2 NPCs
             var npcs = GetRoom2NPCs();
             Debug.Log($"[Tutorial] SetupRoom2Goal adding {npcs.Count} NPCs to LevelGoalHandler");
@@ -471,9 +515,35 @@ namespace MaskCompany
                 requiredTime = 1f
             });
 
-            handler.ResetProgress();
+            // Initialize handler for room 2
+            handler.Initialize();
 
             Debug.Log($"[Tutorial] Room 2 goal set: {room2GoalType} {room2GoalTarget.name}");
+        }
+        
+        /// <summary>
+        /// Refresh the goals UI display
+        /// </summary>
+        private void RefreshGoalsUI()
+        {
+            LevelGoalUI levelGoalUI = null;
+            if (goalUI != null)
+            {
+                levelGoalUI = goalUI.GetComponent<LevelGoalUI>();
+                if (levelGoalUI == null)
+                {
+                    levelGoalUI = goalUI.GetComponentInChildren<LevelGoalUI>();
+                }
+            }
+            if (levelGoalUI == null)
+            {
+                levelGoalUI = FindFirstObjectByType<LevelGoalUI>();
+            }
+            
+            if (levelGoalUI != null)
+            {
+                levelGoalUI.RefreshGoalsDisplay();
+            }
         }
 
         #region Title & Hints
@@ -610,7 +680,12 @@ namespace MaskCompany
             if (doorUI != null) FadeInUI(doorUI, 0.5f);
         }
 
-        private void ShowText(string text)
+        /// <summary>
+        /// Show tutorial text. Optionally show a specific step child by index, or advance to next if index is -1.
+        /// </summary>
+        /// <param name="text">Text to display</param>
+        /// <param name="stepChildIndex">-1 = no step child, -2 = advance to next, 0+ = specific index</param>
+        private void ShowText(string text, int stepChildIndex = -1)
         {
             if (tutorialText != null)
             {
@@ -626,8 +701,15 @@ namespace MaskCompany
                 StartTextWobble();
             }
             
-            // Show next step child
-            ShowNextStepChild();
+            // Handle step child display
+            if (stepChildIndex == -2)
+            {
+                ShowNextStepChild();
+            }
+            else if (stepChildIndex >= 0)
+            {
+                ShowStepChildAt(stepChildIndex);
+            }
         }
         
         private void StartTextWobble()
@@ -715,6 +797,28 @@ namespace MaskCompany
             {
                 currentStepChild = null;
             }
+        }
+        
+        /// <summary>
+        /// Show a specific step child by index (0-based)
+        /// </summary>
+        private void ShowStepChildAt(int index)
+        {
+            if (tutorialTextObject == null) return;
+            if (index < 0 || index >= tutorialTextObject.transform.childCount) return;
+            
+            // Hide current child first
+            if (currentStepChild != null)
+            {
+                var toHide = currentStepChild;
+                FadeOutUI(toHide, 0.3f, () => toHide.SetActive(false));
+            }
+            
+            currentStepChildIndex = index;
+            currentStepChild = tutorialTextObject.transform.GetChild(index).gameObject;
+            HideUIAlpha(currentStepChild);
+            currentStepChild.SetActive(true);
+            FadeInUI(currentStepChild, 0.3f);
         }
         
         /// <summary>
@@ -838,22 +942,26 @@ namespace MaskCompany
 
         private IEnumerator WaitForRoom2Completion()
         {
-            while (!AreAllNPCsComplete(GetRoom2NPCs()))
+            // Just wait for the goal to be completed (target NPC fired/befriended)
+            var handler = LevelGoalHandler.Instance;
+            while (handler != null)
             {
+                var goals = handler.GetGoals();
+                bool anyGoalComplete = false;
+                foreach (var goal in goals)
+                {
+                    if (goal.completed)
+                    {
+                        anyGoalComplete = true;
+                        break;
+                    }
+                }
+                
+                if (anyGoalComplete) break;
                 yield return null;
             }
             
-            // CRITICAL: Force LevelGoalHandler to check NPC states NOW
-            var handler = LevelGoalHandler.Instance;
-            if (handler != null)
-            {
-                handler.ForceCheckNPCStates();
-            }
-            
-            // Wait a frame for the fired event to propagate
-            yield return null;
-            
-            // Then wait for any ongoing fired animation to complete
+            // Wait for any ongoing fired animation to complete
             while (isNPCBeingFired)
             {
                 yield return null;
@@ -1028,6 +1136,88 @@ namespace MaskCompany
             yield return StartCoroutine(FadeInObjects(GetDecorObjects(room2Parent)));
             yield return new WaitForSeconds(npcDelayAfterDecor);
             yield return StartCoroutine(FadeInNPCs(room2NPCsList));
+        }
+        
+        /// <summary>
+        /// Transition to room 2 but only show decor, not NPCs (they spawn after mask tutorial)
+        /// </summary>
+        private IEnumerator TransitionToRoom2DecorOnly()
+        {
+            HideText();
+
+            // Fade out room 1
+            yield return StartCoroutine(FadeOutNPCs(GetRoom1NPCs()));
+            yield return StartCoroutine(FadeOutObjects(GetDecorObjects(room1Parent)));
+
+            if (room1Parent != null) room1Parent.SetActive(false);
+
+            // Activate room 2
+            if (room2Parent != null)
+            {
+                room2Parent.SetActive(true);
+                HideRoomChildren(room2Parent);
+            }
+            
+            // Hide manually assigned room 2 NPCs (they spawn later)
+            var room2NPCsList = GetRoom2NPCs();
+            foreach (var npc in room2NPCsList)
+            {
+                if (npc != null)
+                {
+                    HideNPC(npc);
+                }
+            }
+
+            yield return new WaitForSeconds(0.5f);
+
+            // Fade in room 2 decor ONLY (no NPCs yet)
+            yield return StartCoroutine(FadeInObjects(GetDecorObjects(room2Parent)));
+        }
+        
+        /// <summary>
+        /// Wait until player has used all 4 mask types
+        /// </summary>
+        private IEnumerator WaitForAllMasksUsed()
+        {
+            // Need to use Joy, Neutral, Anger, Fear
+            while (usedMasks.Count < 4)
+            {
+                yield return null;
+            }
+            Debug.Log("[Tutorial] All masks used!");
+        }
+        
+        /// <summary>
+        /// Called by PlayerController when mask is changed
+        /// </summary>
+        public void OnMaskUsed(MaskType mask)
+        {
+            if (currentStep == 2 && canChangeMask)
+            {
+                usedMasks.Add(mask);
+                Debug.Log($"[Tutorial] Mask used: {mask}. Total: {usedMasks.Count}/4");
+            }
+        }
+        
+        /// <summary>
+        /// Fade screen to black and load a scene
+        /// </summary>
+        private IEnumerator FadeAndLoadScene(string sceneName)
+        {
+            if (fadeImage != null)
+            {
+                // Enable and set alpha to 0
+                fadeImage.gameObject.SetActive(true);
+                Color c = fadeImage.color;
+                c.a = 0f;
+                fadeImage.color = c;
+                
+                // Fade to black
+                fadeImage.DOFade(1f, sceneFadeDuration);
+                yield return new WaitForSeconds(sceneFadeDuration);
+            }
+            
+            SceneManager.LoadScene(sceneName);
         }
 
         #endregion

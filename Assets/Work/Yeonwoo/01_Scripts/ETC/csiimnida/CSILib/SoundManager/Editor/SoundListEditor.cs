@@ -1,13 +1,13 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using UnityEditor;
 using UnityEditor.UIElements;
 using UnityEngine;
 using UnityEngine.UIElements;
-using Work.Yeonwoo._01_Scripts.ETC.csiimnida.CSILib.SoundManager.RunTime;
+using CSILib.SoundManager.RunTime;
 
-namespace Work.Yeonwoo._01_Scripts.ETC.csiimnida.CSILib.SoundManager.Editor
+namespace CSILib.SoundManager.Editor
 {
     public class SoundListEditor : EditorWindow
     {

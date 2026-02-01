@@ -131,6 +131,17 @@ namespace MaskCompany
             levelFailed = false;
             goalsCompleted = 0;
         }
+        
+        /// <summary>
+        /// Full reset for a new room/section (allows re-initialization)
+        /// </summary>
+        public void ResetForNewRoom()
+        {
+            initialized = false;
+            levelComplete = false;
+            levelFailed = false;
+            goalsCompleted = 0;
+        }
 
         private void Update()
         {

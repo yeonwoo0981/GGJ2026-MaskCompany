@@ -94,6 +94,12 @@ namespace MaskCompany
             if (currentMask == mask) return;
             currentMask = mask;
             UpdateMaskVisual();
+            
+            // Notify tutorial manager if in tutorial mode
+            if (TutorialManager.TutoMode && TutorialManager.Instance != null)
+            {
+                TutorialManager.Instance.OnMaskUsed(mask);
+            }
         }
 
         private void UpdateMaskVisual()

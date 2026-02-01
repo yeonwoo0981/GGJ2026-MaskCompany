@@ -1,11 +1,11 @@
-﻿using System;
+using System;
 using UnityEngine;
 
 namespace Work.Yeonwoo._01_Scripts.NPC.PathFinder
 {
     public class AgentMover : MonoBehaviour, IComponent
     {
-        [SerializeField] private new Rigidbody2D rb;
+        [SerializeField] private Rigidbody2D rb;
         private Agent _owner;
         private Vector2 _movementInput;
 

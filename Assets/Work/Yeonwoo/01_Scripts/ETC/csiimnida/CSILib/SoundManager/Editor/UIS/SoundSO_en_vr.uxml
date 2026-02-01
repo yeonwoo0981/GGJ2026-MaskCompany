@@ -1,5 +1,5 @@
 <ui:UXML xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="True">
-    <Style src="project://database/Assets/csiimnida/CSILib/SoundManager/Editor/UIS/SoundSO.uss?fileID=7433441132597879392&amp;guid=cf06a3293ec645846afa4457f222c841&amp;type=3#SoundSO" />
+    <Style src="project://database/Assets/Work/Yeonwoo/01_Scripts/ETC/csiimnida/CSILib/SoundManager/Editor/UIS/SoundSO.uss?fileID=7433441132597879392&amp;guid=cf06a3293ec645846afa4457f222c841&amp;type=3#SoundSO" />
     <ui:VisualElement name="Root" style="flex-grow: 1; justify-content: space-between;">
         <ui:VisualElement name="Ssettings" style="flex-grow: 0; overflow: visible; visibility: visible; display: flex;">
             <ui:Label text="sdddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd" name="NameLabel" style="font-size: 19px; border-bottom-color: rgb(77, 77, 77); border-bottom-width: 2px; padding-top: 5px; padding-right: 5px; padding-bottom: 5px; padding-left: 5px; margin-top: 3px; margin-right: 3px; margin-bottom: 3px; margin-left: 3px; text-overflow: ellipsis; overflow: hidden;" />
