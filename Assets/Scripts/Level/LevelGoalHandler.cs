@@ -40,6 +40,12 @@ namespace MaskCompany
         [SerializeField] private bool levelFailed;
         [SerializeField] private int goalsCompleted;
 
+        [Header("Audio")]
+        [SerializeField] private AudioClip successSound;
+        [SerializeField] private AudioClip failSound;
+        [SerializeField] [Range(0f, 1f)] private float sfxVolume = 1f;
+        private AudioSource audioSource;
+
         [Header("Control")]
         [SerializeField] private bool autoStart = true; // Set false for tutorial control
         private bool initialized;
@@ -48,6 +54,10 @@ namespace MaskCompany
         {
             Instance = this;
             currentLives = maxLives;
+            
+            // Create audio source for SFX
+            audioSource = gameObject.AddComponent<AudioSource>();
+            audioSource.playOnAwake = false;
         }
 
         private void Start()
@@ -180,6 +190,9 @@ namespace MaskCompany
         {
             Debug.Log($"[LevelGoalHandler] {npc.name} got FIRED!");
 
+            // Play fail sound
+            PlaySound(failSound);
+
             // Check if this NPC was a goal target
             bool wasFireGoal = false;
             foreach (var goal in goals)
@@ -283,6 +296,9 @@ namespace MaskCompany
         {
             Debug.Log($"[LevelGoalHandler] {npc.name} is now your FRIEND!");
 
+            // Play success sound
+            PlaySound(successSound);
+
             foreach (var goal in goals)
             {
                 if (goal.targetNPC == npc && goal.goalType == GoalType.Befriend)
@@ -383,6 +399,14 @@ namespace MaskCompany
             levelFailed = true;
             Debug.Log("[LevelGoalHandler] LEVEL FAILED!");
             OnLevelFailed?.Invoke();
+        }
+
+        private void PlaySound(AudioClip clip)
+        {
+            if (clip != null && audioSource != null)
+            {
+                audioSource.PlayOneShot(clip, sfxVolume);
+            }
         }
 
         // Public API

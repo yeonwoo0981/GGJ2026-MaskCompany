@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using UnityEngine;
 using UnityEngine.InputSystem;
@@ -28,6 +29,11 @@ namespace MaskCompany
         private bool isChangingMask; // True while mask change animation is playing
 
         public MaskType CurrentMask => currentMask;
+        
+        /// <summary>
+        /// Event fired when mask changes. Parameter is the new mask type.
+        /// </summary>
+        public event Action<MaskType> OnMaskChanged;
 
         private void Awake()
         {
@@ -152,6 +158,9 @@ namespace MaskCompany
             // Now change the mask visual
             currentMask = newMask;
             UpdateMaskVisual();
+            
+            // Fire mask changed event
+            OnMaskChanged?.Invoke(newMask);
             
             // Notify tutorial manager if in tutorial mode
             if (TutorialManager.TutoMode && TutorialManager.Instance != null)

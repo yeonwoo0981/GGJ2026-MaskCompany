@@ -251,7 +251,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 228581106}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: c2f976e333764d268feb21bbd2ba8e9b, type: 3}
   m_Name: 
@@ -264,7 +264,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 228581106}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: aa13a5431164a7f42bfe562f231e13af, type: 3}
   m_Name: 
@@ -586,6 +586,9 @@ MonoBehaviour:
   levelComplete: 0
   levelFailed: 0
   goalsCompleted: 0
+  successSound: {fileID: 8300000, guid: 6454d54921353a6429887d1c2945c162, type: 3}
+  failSound: {fileID: 8300000, guid: 0febf7b7f2b13314286517057ca34eab, type: 3}
+  sfxVolume: 1
   autoStart: 1
 --- !u!4 &448638559
 Transform:

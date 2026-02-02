@@ -127,6 +127,7 @@ GameObject:
   - component: {fileID: 4777680487096853841}
   - component: {fileID: 3657456500049124935}
   - component: {fileID: 2730730592902884161}
+  - component: {fileID: 7774393462907568462}
   m_Layer: 0
   m_Name: Player
   m_TagString: Untagged
@@ -193,6 +194,7 @@ MonoBehaviour:
   moveSpeed: 5
   currentMask: 0
   maskRenderer: {fileID: 4070398246773412919}
+  maskChangeAnimDuration: 0.5
   joySprite: {fileID: 21300000, guid: 7ef25a4f6cdbc234d95525923885d19d, type: 3}
   angerSprite: {fileID: 21300000, guid: a27ec727619d918429fddf1e8db641be, type: 3}
   fearSprite: {fileID: 21300000, guid: 6f8de92c3abd1064785b4d4d05390cf0, type: 3}
@@ -291,6 +293,25 @@ CircleCollider2D:
   m_CompositeOrder: 0
   m_Offset: {x: 0, y: -0.21}
   m_Radius: 0.42
+--- !u!114 &7774393462907568462
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6233794057305157941}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1111109ee889e4840b4781bd66c9b1d4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::MaskCompany.MaskMusicPlayer
+  joyMusic: {fileID: 8300000, guid: 0d1be2380648c104c8ec63691214ac78, type: 3}
+  neutralMusic: {fileID: 8300000, guid: 3957a0c8cbcd96046af56b2a0d0831b2, type: 3}
+  angerMusic: {fileID: 8300000, guid: 18c853e8c89921945a1f1169c4157388, type: 3}
+  fearMusic: {fileID: 8300000, guid: 50798c491f565be4c96c5d3bf46d5a23, type: 3}
+  fadeDuration: 0.3
+  volume: 0.5
+  player: {fileID: 0}
 --- !u!1 &8494512559463114993
 GameObject:
   m_ObjectHideFlags: 0
