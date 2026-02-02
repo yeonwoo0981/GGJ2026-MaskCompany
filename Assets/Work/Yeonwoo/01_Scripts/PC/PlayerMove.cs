@@ -1,6 +1,7 @@
 ﻿using System;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using Work.Yeonwoo._01_Scripts.ETC.csiimnida.CSILib.SoundManager.RunTime;
 
 namespace Work.Yeonwoo._01_Scripts.PC
 {
@@ -25,6 +26,10 @@ namespace Work.Yeonwoo._01_Scripts.PC
         {
             bool isMoving = _moveDir.sqrMagnitude > 0.01f;
 
+            if (isMoving)
+                SoundManager.Instance.PlaySound("Walk");
+            else
+                SoundManager.Instance.StopSound("Walk");
             float targetSpeed = isMoving ? Movement.MaxSpeed : 0f;
             float accel = isMoving ? Movement.acceleration : Movement.deceleration;
 
