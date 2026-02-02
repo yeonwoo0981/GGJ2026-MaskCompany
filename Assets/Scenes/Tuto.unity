@@ -388,7 +388,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 31526901}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: c2f976e333764d268feb21bbd2ba8e9b, type: 3}
   m_Name: 
@@ -401,7 +401,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 31526901}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: aa13a5431164a7f42bfe562f231e13af, type: 3}
   m_Name: 
@@ -3280,6 +3280,41 @@ Transform:
   - {fileID: 2038367688}
   m_Father: {fileID: 2126703947}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &1006503740 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 6233794057305157941, guid: 82b396ef6edd55f4aafd9354fea9595c, type: 3}
+  m_PrefabInstance: {fileID: 6614779025494350599}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &1006503743 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 4777680487096853841, guid: 82b396ef6edd55f4aafd9354fea9595c, type: 3}
+  m_PrefabInstance: {fileID: 6614779025494350599}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1006503740}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1903671492213754398011a2571dc396, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::MaskCompany.PlayerController
+--- !u!114 &1006503746
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1006503740}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1111109ee889e4840b4781bd66c9b1d4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::MaskCompany.MaskMusicPlayer
+  joyMusic: {fileID: 8300000, guid: 0d1be2380648c104c8ec63691214ac78, type: 3}
+  neutralMusic: {fileID: 8300000, guid: 3957a0c8cbcd96046af56b2a0d0831b2, type: 3}
+  angerMusic: {fileID: 8300000, guid: 18c853e8c89921945a1f1169c4157388, type: 3}
+  fearMusic: {fileID: 8300000, guid: 50798c491f565be4c96c5d3bf46d5a23, type: 3}
+  fadeDuration: 0.3
+  volume: 0.5
+  player: {fileID: 1006503743}
 --- !u!1 &1029546536
 GameObject:
   m_ObjectHideFlags: 0
@@ -6653,6 +6688,9 @@ MonoBehaviour:
   levelComplete: 0
   levelFailed: 0
   goalsCompleted: 0
+  successSound: {fileID: 8300000, guid: 6454d54921353a6429887d1c2945c162, type: 3}
+  failSound: {fileID: 8300000, guid: 0febf7b7f2b13314286517057ca34eab, type: 3}
+  sfxVolume: 1
   autoStart: 0
 --- !u!4 &2067960740
 Transform:
@@ -7243,7 +7281,10 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 6233794057305157941, guid: 82b396ef6edd55f4aafd9354fea9595c, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1006503746}
   m_SourcePrefab: {fileID: 100100000, guid: 82b396ef6edd55f4aafd9354fea9595c, type: 3}
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
